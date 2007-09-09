@@ -1,0 +1,59 @@
+<Project name="Ribbons" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
+  <Configurations active="Debug">
+    <Configuration name="Debug" ctype="DotNetProjectConfiguration">
+      <Output directory="./bin/Debug" assembly="Ribbons" />
+      <Build debugmode="True" target="Library" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="True" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" win32Icon="./" ctype="CSharpCompilerParameters" />
+    </Configuration>
+    <Configuration name="Release" ctype="DotNetProjectConfiguration">
+      <Output directory="./bin/Release" assembly="Ribbons" />
+      <Build debugmode="False" target="Library" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="True" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" win32Icon="./" ctype="CSharpCompilerParameters" />
+    </Configuration>
+  </Configurations>
+  <Contents>
+    <File name="./gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/objects.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./RibbonGroup.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Theme.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ColorScheme.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Ribbon.cs" subtype="Code" buildaction="Compile" />
+    <File name="./SyntheticWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="./SyntheticEventCrossing.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Button.cs" subtype="Code" buildaction="Compile" />
+    <File name="./GroupStyle.cs" subtype="Code" buildaction="Compile" />
+    <File name="./PageSelectedHandler.cs" subtype="Code" buildaction="Compile" />
+    <File name="./PageAddedHandler.cs" subtype="Code" buildaction="Compile" />
+    <File name="./PageMovedHandler.cs" subtype="Code" buildaction="Compile" />
+    <File name="./PageRemovedHandler.cs" subtype="Code" buildaction="Compile" />
+    <File name="./PageEventArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ToolPack.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ToolBox.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Tile.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Gallery.cs" subtype="Code" buildaction="Compile" />
+    <File name="./TileSelectedHandler.cs" subtype="Code" buildaction="Compile" />
+    <File name="./TileSelectedEventArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="./FlowLayoutContainer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./GalleryPopupWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ExtraEventBox.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ToggleButton.cs" subtype="Code" buildaction="Compile" />
+    <File name="./BaseButton.cs" subtype="Code" buildaction="Compile" />
+  </Contents>
+  <References>
+    <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="glib-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="gtk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="Mono.Cairo, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+    <ProjectReference type="Gac" localcopy="True" refto="pango-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+  </References>
+  <GtkDesignInfo partialTypes="True" isWidgetLibrary="True">
+    <ExportedWidgets>
+      <Widget>Ribbons.RibbonButton</Widget>
+      <Widget>Ribbons.Label</Widget>
+    </ExportedWidgets>
+  </GtkDesignInfo>
+</Project>

@@ -1,0 +1,20 @@
+<Combine name="Ribbons" fileversion="2.0">
+  <Configurations active="Debug">
+    <Configuration name="Debug" ctype="CombineConfiguration">
+      <Entry build="True" name="Ribbons" configuration="Debug" />
+      <Entry build="True" name="Sample" configuration="Debug" />
+    </Configuration>
+    <Configuration name="Release" ctype="CombineConfiguration">
+      <Entry build="True" name="Ribbons" configuration="Release" />
+      <Entry build="True" name="Sample" configuration="Release" />
+    </Configuration>
+  </Configurations>
+  <StartMode startupentry="Sample" single="True">
+    <Execute type="None" entry="Ribbons" />
+    <Execute type="None" entry="Sample" />
+  </StartMode>
+  <Entries>
+    <Entry filename="./Ribbons/Ribbons.mdp" />
+    <Entry filename="./Sample/Sample.mdp" />
+  </Entries>
+</Combine>
