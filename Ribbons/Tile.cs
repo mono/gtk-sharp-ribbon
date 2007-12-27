@@ -91,6 +91,9 @@ namespace Ribbons
 			
 			DrawContent (cr, contentArea);
 			
+			((IDisposable)cr.Target).Dispose ();
+			((IDisposable)cr).Dispose ();
+			
 			return base.OnExposeEvent (evnt);
 		}
 		

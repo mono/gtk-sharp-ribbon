@@ -17,7 +17,7 @@ namespace Sample
 		public MainWindow() : base (WindowType.Toplevel)
 		{
 			AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
-			
+		
 			VBox master = new VBox ();
 			master.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
@@ -29,7 +29,7 @@ namespace Sample
 			group0 = new RibbonGroup ();
 			group0.Label = "Summer of Code";
 			group0.Child = button0;
-			group0.Expand += onClick;
+			//group0.Expand += onClick;
 			
 			Menu openMenu = new Menu ();
 			MenuItem abc_txt = new MenuItem ("abc.txt");
@@ -154,7 +154,7 @@ namespace Sample
 			master.PackStart (txt, true, true, 0);
 			
 			Add (master);
-			
+
 			ScreenChanged += Window_OnScreenChanged;
 			Window_OnScreenChanged (this, null);
 			ExposeEvent += Window_OnExpose;
@@ -186,6 +186,9 @@ namespace Sample
 			
 			cr.Operator = Operator.Source;
 			cr.Paint ();
+			
+			((IDisposable)cr.Target).Dispose();
+			((IDisposable)cr).Dispose();			
 			
 			args.RetVal = false;
 		}

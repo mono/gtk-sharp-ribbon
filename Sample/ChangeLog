@@ -1,0 +1,4 @@
+2007-12-28  Laurent Debacker <debackerl@gmail.com> 
+
+	* MainWindow.cs, ChangeLog: Fixing calls to Dispose() and Destroy()
+

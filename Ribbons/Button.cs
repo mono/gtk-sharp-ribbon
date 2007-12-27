@@ -225,6 +225,9 @@ namespace Ribbons
 			cr.Clip ();
 			Draw (cr);
 			
+			((IDisposable)cr.Target).Dispose ();
+			((IDisposable)cr).Dispose ();
+			
 			return base.OnExposeEvent (evnt);
 		}
 		

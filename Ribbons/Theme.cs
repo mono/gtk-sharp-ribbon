@@ -48,6 +48,7 @@ namespace Ribbons
 				linGrad.AddColorStop (1.0, colorScheme.PrettyDark);
 				cr.Pattern = linGrad;
 				cr.Fill ();
+				linGrad.Destroy ();
 				
 				double frameSize = 2*lineWidth + space;
 				double availableHorizontalSpace = r.Width - 2 * frameSize;
@@ -77,6 +78,7 @@ namespace Ribbons
 			linGrad.AddColorStop (1.0, colorScheme.PrettyDark);
 			cr.Pattern = linGrad;
 			cr.Stroke ();
+			linGrad.Destroy ();
 		}
 		
 		public Gdk.Color GetForecolorForRibbonTabs (bool Selected)
@@ -136,6 +138,7 @@ namespace Ribbons
 					linGrad.AddColorStop (1.0, new Color (0, 0, 0, 0.075));
 					cr.Pattern = linGrad;
 					cr.Fill ();
+					linGrad.Destroy ();
 					
 					cr.Arc (x0 + roundSize, y1 - roundSize, roundSize - lineWidth, Math.PI/2, Math.PI);
 					cr.LineTo (x0 + lineWidth, ymid);
@@ -147,6 +150,7 @@ namespace Ribbons
 					linGrad.AddColorStop (0.5, new Color (0, 0, 0, 0.0));
 					cr.Pattern = linGrad;
 					cr.Fill ();
+					linGrad.Destroy ();
 				}
 				
 				/*** TAB ***/
@@ -169,6 +173,7 @@ namespace Ribbons
 				linGrad.AddColorStop (1.0, c);
 				cr.Pattern = linGrad;
 				cr.Fill ();
+				linGrad.Destroy ();
 				
 				/*** TAB :: DARK BORDER ***/
 				
@@ -198,6 +203,7 @@ namespace Ribbons
 				linGrad.AddColorStop (1.0, ColorScheme.SetAlphaChannel (colorScheme.Bright, 0));
 				cr.Pattern = linGrad;
 				cr.Stroke ();
+				linGrad.Destroy ();
 				
 				/*** TAB :: SHADOW ***/
 				
@@ -285,6 +291,7 @@ namespace Ribbons
 				
 				cr.Pattern = bodyPattern;
 				cr.Fill ();
+				bodyPattern.Destroy ();
 				
 				x0 = bodyAllocation.X + lineWidth15; y0 = bodyAllocation.Y + lineWidth15;
 				x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth15; y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth15;
@@ -308,6 +315,7 @@ namespace Ribbons
 				
 				cr.Pattern = innerBorderPattern;
 				cr.Stroke ();
+				innerBorderPattern.Destroy ();
 				
 				x0 = bodyAllocation.X + lineWidth05; y0 = bodyAllocation.Y + lineWidth05;
 				x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth05; y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth05;
@@ -353,6 +361,7 @@ namespace Ribbons
 				
 				cr.Pattern = bodyPattern;
 				cr.Fill ();
+				bodyPattern.Destroy ();
 				
 				if(widget.GroupStyle != GroupStyle.Left)
 				{
@@ -465,6 +474,7 @@ namespace Ribbons
 				cr.Pattern = grad;
 				cr.Rectangle (bodyAllocation);
 				cr.Fill ();
+				grad.Destroy ();
 			}
 			
 			cr.Color = new Color (1, 1, 1);
