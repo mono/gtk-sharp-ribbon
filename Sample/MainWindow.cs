@@ -29,7 +29,7 @@ namespace Sample
 			group0 = new RibbonGroup ();
 			group0.Label = "Summer of Code";
 			group0.Child = button0;
-			//group0.Expand += onClick;
+			group0.Expand += onClick;
 			
 			Menu openMenu = new Menu ();
 			MenuItem abc_txt = new MenuItem ("abc.txt");
