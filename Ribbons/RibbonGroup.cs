@@ -13,11 +13,12 @@ namespace Ribbons
 		protected Button expandButton;
 		protected EventHandler expandHandler;
 		
-		private double barHeight;
+		private double barHeight, barWidth;
 		
 		protected double childPadding = 1.0;
 		protected double lineWidth = 1.0;
 		protected double space = 2.0;
+		protected Position labelPosition = Position.Bottom;
 		
 		/// <summary>Displayed label.</summary>
 		public string Label
@@ -65,6 +66,17 @@ namespace Ribbons
 			get { return theme; }
 		}
 		
+		/// <summary>Position of the label.</summary>
+		public Position LabelPosition
+		{
+			set
+			{
+				labelPosition = value;
+				QueueDraw ();
+			}
+			get { return labelPosition; }
+		}
+		
 		/// <summary>Default constructor.</summary>
 		public RibbonGroup ()
 		{
@@ -102,27 +114,54 @@ namespace Ribbons
 			base.OnSizeRequested (ref requisition);
 			
 			int lw, lh;
-			lbl_layout.GetPixelSize (out lw, out lh);
+			
+			if(labelPosition == Position.Top || labelPosition == Position.Bottom)
+				lbl_layout.GetPixelSize (out lw, out lh);
+			else
+				lbl_layout.GetPixelSize (out lh, out lw);
 			
 			double frameSize = 2*lineWidth + childPadding;
+			
 			barHeight = lh + 2 * space;
+			barWidth = lw + 2 * space;
+			
 			if(expandButton != null && expandButton.Visible)
 			{
-				expandButton.SetSizeRequest (lh, lh);
+				if(labelPosition == Position.Top || labelPosition == Position.Bottom)
+					expandButton.SetSizeRequest (lh, lh);
+				else
+					expandButton.SetSizeRequest (lw, lw);
+				
 				expandButton.SizeRequest ();
+				
+				if(labelPosition == Position.Top || labelPosition == Position.Bottom)
+					barWidth += expandButton.WidthRequest + (int)space;
+				else
+					barHeight += expandButton.HeightRequest + (int)space;
 			}
 			
 			Requisition childRequisition = new Requisition ();
+			
 			if(Child != null && Child.Visible)
 			{
 				if(HeightRequest != -1)
 				{
-					int left = HeightRequest - (int)(2 * frameSize + barHeight);
+					int left = HeightRequest;
+					if(labelPosition == Position.Top || labelPosition == Position.Bottom)
+						left -= (int)(2 * frameSize + barHeight);
+					else
+						left -= (int)(2 * frameSize);
+					
 					Child.HeightRequest = left;
 				}
 				if(WidthRequest != -1)
 				{
-					int left = WidthRequest - (int)(2 * frameSize);
+					int left = WidthRequest;
+					if(labelPosition == Position.Top || labelPosition == Position.Bottom)
+						left -= (int)(2 * frameSize);
+					else
+						left -= (int)(2 * frameSize + barWidth);
+					
 					Child.WidthRequest = left;
 				}
 				childRequisition = Child.SizeRequest ();
@@ -133,23 +172,28 @@ namespace Ribbons
 				if(Child != null && Child.Visible)
 				{
 					requisition.Width = childRequisition.Width + (int)(2 * frameSize);
+					
+					if(labelPosition == Position.Left || labelPosition == Position.Right)
+						requisition.Width += (int)barWidth;
 				}
 				else
 				{
-					requisition.Width = lw + (int)(2 * (2*lineWidth + space));
-					if(expandButton != null && expandButton.Visible)
-					{
-						requisition.Width += expandButton.WidthRequest + (int)space;
-					}
+					requisition.Width = (int)(2 * frameSize + barWidth);
 				}
 			}
 			
 			if(HeightRequest == -1)
 			{
-				requisition.Height = (int)(2 * frameSize + barHeight);
 				if(Child != null && Child.Visible)
 				{
-					requisition.Height += childRequisition.Height;
+					requisition.Height = childRequisition.Height + (int)(2 * frameSize);
+					
+					if(labelPosition == Position.Top || labelPosition == Position.Bottom)
+						requisition.Height += (int)barHeight;
+				}
+				else
+				{
+					requisition.Height = (int)(2 * frameSize + barHeight);
 				}
 			}
 		}
@@ -164,8 +208,17 @@ namespace Ribbons
 				Gdk.Rectangle r;
 				r.Height = expandButton.HeightRequest;
 				r.Width = expandButton.WidthRequest;
-				r.X = allocation.X + allocation.Width - r.Width - (int)frameSize;
-				r.Y = allocation.Y + allocation.Height - r.Height - (int)frameSize;
+				
+				if(labelPosition == Position.Left)
+					r.X = allocation.X + (int)frameSize;
+				else
+					r.X = allocation.X + allocation.Width - r.Width - (int)frameSize;
+				
+				if(labelPosition == Position.Top)
+					r.Y = allocation.Y + (int)frameSize;
+				else
+					r.Y = allocation.Y + allocation.Height - r.Height - (int)frameSize;
+				
 				expandButton.SizeAllocate (r);
 			}
 			
@@ -173,8 +226,20 @@ namespace Ribbons
 			{
 				double frameSize = 2*lineWidth + childPadding;
 				int wi = allocation.Width - (int)(2 * frameSize);
-				int he = allocation.Height - (int)(2 * frameSize + barHeight); 
+				int he = allocation.Height - (int)(2 * frameSize);
+				
 				Gdk.Rectangle r = new Gdk.Rectangle (allocation.X + (int)frameSize, allocation.Y + (int)frameSize, wi, he);
+				
+				if(labelPosition == Position.Top)
+					r.Y += (int)barHeight;
+				else if(labelPosition == Position.Left)
+					r.X += (int)barWidth;
+				
+				if(labelPosition == Position.Top || LabelPosition == Position.Bottom)
+					r.Height -= (int)barHeight;
+				else
+					r.Width -= (int)barWidth;
+				
 				Child.SizeAllocate (r);
 			}
 		}

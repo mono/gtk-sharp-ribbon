@@ -1,3 +1,8 @@
+2007-12-30  Laurent Debacker <debackerl@gmail.com> 
+
+	* Theme.cs, Position.cs, RibbonGroup.cs, Ribbons.mdp: Left, Right, and Top
+	  position for the label of RibbonGroup implemented.
+
 2007-12-28  Laurent Debacker <debackerl@gmail.com> 
 
 	* Ribbon.cs, ToggleButton.cs, RibbonGroup.cs, Tile.cs, Gallery.cs, Theme.cs,

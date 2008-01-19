@@ -37,33 +37,115 @@ namespace Ribbons
 				Pango.CairoHelper.UpdateLayout (cr, l);
 				l.GetPixelSize(out lblWidth, out lblHeight);
 				
-				double bandHeight = lblHeight + 2*space;
-				cr.Arc (x1, y1, roundSize - lineWidth15, 0, Math.PI/2);
-				cr.Arc (x0, y1 - lineWidth, roundSize - lineWidth05, Math.PI/2, Math.PI);
-				double bandY = y1 + roundSize - 2*lineWidth - bandHeight;
-				cr.LineTo (x0 - roundSize + lineWidth05, bandY);
-				cr.LineTo (x1 + roundSize - lineWidth15, bandY);
-				linGrad = new LinearGradient (0, bandY, 0, bandY + bandHeight);
-				linGrad.AddColorStop (0.0, colorScheme.Dark);
-				linGrad.AddColorStop (1.0, colorScheme.PrettyDark);
-				cr.Pattern = linGrad;
-				cr.Fill ();
-				linGrad.Destroy ();
-				
-				double frameSize = 2*lineWidth + space;
-				double availableHorizontalSpace = r.Width - 2 * frameSize;
-				if(expandButton.Visible) availableHorizontalSpace -= expandButton.WidthRequest + space;
-				
-				cr.Save ();
-				cr.Rectangle (r.X + frameSize, bandY, availableHorizontalSpace, bandHeight);
-				cr.Clip ();
-				
-				cr.Color = new Color(1, 1, 1);
-				Pango.CairoHelper.UpdateLayout (cr, l);
-				cr.MoveTo (r.X + frameSize + Math.Max(0, (availableHorizontalSpace - lblWidth) / 2), bandY + space);
-				Pango.CairoHelper.ShowLayout (cr, l);
-				
-				cr.Restore();
+				if(w.LabelPosition == Position.Top || w.LabelPosition == Position.Bottom)
+				{
+					double labelY;
+					double bandHeight = lblHeight + 2*space;
+					
+					if(w.LabelPosition == Position.Top)
+					{
+						cr.Arc (x0, y0, roundSize - lineWidth05, Math.PI, 3*Math.PI/2);
+						cr.Arc (x1, y0, roundSize - lineWidth05, 3*Math.PI/2, 0);
+						double bandY = y0 - roundSize + 2*lineWidth + bandHeight;
+						cr.LineTo (x1 + roundSize - lineWidth15, bandY);
+						cr.LineTo (x0 - roundSize + lineWidth05, bandY);
+						linGrad = new LinearGradient (0, bandY - bandHeight, 0, bandY);
+						linGrad.AddColorStop (0.0, colorScheme.Dark);
+						linGrad.AddColorStop (1.0, colorScheme.PrettyDark);
+						cr.Pattern = linGrad;
+						cr.Fill ();
+						linGrad.Destroy ();
+						
+						labelY = bandY - bandHeight - space;
+					}
+					else
+					{
+						cr.Arc (x1, y1, roundSize - lineWidth15, 0, Math.PI/2);
+						cr.Arc (x0, y1 - lineWidth, roundSize - lineWidth05, Math.PI/2, Math.PI);
+						double bandY = y1 + roundSize - 2*lineWidth - bandHeight;
+						cr.LineTo (x0 - roundSize + lineWidth05, bandY);
+						cr.LineTo (x1 + roundSize - lineWidth15, bandY);
+						linGrad = new LinearGradient (0, bandY, 0, bandY + bandHeight);
+						linGrad.AddColorStop (0.0, colorScheme.Dark);
+						linGrad.AddColorStop (1.0, colorScheme.PrettyDark);
+						cr.Pattern = linGrad;
+						cr.Fill ();
+						linGrad.Destroy ();
+						
+						labelY = bandY;
+					}
+					
+					double frameSize = 2*lineWidth + space;
+					double availableHorizontalSpace = r.Width - 2 * frameSize;
+					if(expandButton.Visible) availableHorizontalSpace -= expandButton.WidthRequest + space;
+					
+					cr.Save ();
+					cr.Rectangle (r.X + frameSize, labelY, availableHorizontalSpace, bandHeight);
+					cr.Clip ();
+					
+					cr.Color = new Color(1, 1, 1);
+					Pango.CairoHelper.UpdateLayout (cr, l);
+					cr.MoveTo (r.X + frameSize + Math.Max(0, (availableHorizontalSpace - lblWidth) / 2), labelY + space);
+					Pango.CairoHelper.ShowLayout (cr, l);
+					
+					cr.Restore();
+				}
+				else	// label at right or left
+				{
+					double labelX;
+					double bandWidth = lblHeight + 2*space;
+					
+					if(w.LabelPosition == Position.Left)
+					{
+						cr.Arc (x0, y1, roundSize - lineWidth05, Math.PI/2, Math.PI);
+						cr.Arc (x0, y0, roundSize - lineWidth05, Math.PI, 3*Math.PI/2);
+						double bandX = x0 - roundSize + 2*lineWidth + bandWidth;
+						cr.LineTo (bandX, y0 - roundSize + lineWidth05);
+						cr.LineTo (bandX, y1 + roundSize - lineWidth15);
+						linGrad = new LinearGradient (bandX - bandWidth, 0, bandX, 0);
+						linGrad.AddColorStop (0.0, colorScheme.Dark);
+						linGrad.AddColorStop (1.0, colorScheme.PrettyDark);
+						cr.Pattern = linGrad;
+						cr.Fill ();
+						linGrad.Destroy ();
+						
+						labelX = bandX - bandWidth - space;
+					}
+					else
+					{
+						cr.Arc (x1, y0 - lineWidth05, roundSize - lineWidth15, 3*Math.PI/2, 0);
+						cr.Arc (x1, y1, roundSize - lineWidth15, 0, Math.PI/2);
+						double bandX = x1 + roundSize - 2*lineWidth - bandWidth;
+						cr.LineTo (bandX, y1 + roundSize - lineWidth15);
+						cr.LineTo (bandX, y0 - roundSize + lineWidth05);
+						linGrad = new LinearGradient (bandX, 0, bandX + bandWidth, 0);
+						linGrad.AddColorStop (0.0, colorScheme.Dark);
+						linGrad.AddColorStop (1.0, colorScheme.PrettyDark);
+						cr.Pattern = linGrad;
+						cr.Fill ();
+						linGrad.Destroy ();
+						
+						labelX = bandX + space;
+					}
+					
+					double frameSize = 2*lineWidth + space;
+					double availableVerticalSpace = r.Height - 2 * frameSize;
+					if(expandButton.Visible) availableVerticalSpace -= expandButton.HeightRequest + space;
+					
+					cr.Save ();
+					cr.Rectangle (labelX, r.Y + frameSize, bandWidth, availableVerticalSpace);
+					cr.Clip ();
+					cr.Rotate (-Math.PI / 2);
+					
+					cr.Color = new Color(1, 1, 1);
+					Pango.CairoHelper.UpdateLayout (cr, l);
+					double shift = Math.Max(0, (availableVerticalSpace - lblWidth) / 2);
+					if(expandButton.Visible) shift += expandButton.HeightRequest + space;
+					cr.MoveTo (-(r.Y + r.Height - 2 * space - shift), labelX + space);
+					Pango.CairoHelper.ShowLayout (cr, l);
+					
+					cr.Restore();
+				}
 			}
 			
 			cr.MoveTo (x1 + roundSize - lineWidth15, y1);
