@@ -18,6 +18,7 @@ namespace Ribbons
 		protected const double bigArrowSize = 8.0;
 		
 		/// <summary>Fired when the button is clicked.</summary>
+		[GLib.Signal("clicked")]
 		public event EventHandler Clicked;
 		
 		/// <summary>Drop down menu displayed when the arrow is pressed.</summary>

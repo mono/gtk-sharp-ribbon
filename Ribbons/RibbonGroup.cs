@@ -41,6 +41,7 @@ namespace Ribbons
 		
 		/// <summary>Expand event.</summary>
 		/// <remarks>Fired whenever the expand button is clicked.</remarks>
+		[GLib.Signal("expanded")]
 		public event EventHandler Expand
 		{
 			add

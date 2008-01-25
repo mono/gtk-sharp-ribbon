@@ -1,3 +1,7 @@
+2008-01-24  Laurent Debacker <debackerl@gmail.com> 
+
+	* RibbonGroup.cs, Button.cs: Added signal names to enable accelerators.
+
 2007-12-30  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs, Position.cs, RibbonGroup.cs, Ribbons.mdp: Left, Right, and Top
