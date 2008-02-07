@@ -35,6 +35,7 @@ namespace Ribbons
 			foreach(Tile t in UnderlyingGallery.Tiles)
 			{
 				Tile copy = t.Copy ();
+				copy.Show ();
 				tiles.Add (copy);
 				
 				if(t == UnderlyingGallery.SelectedTile)
@@ -52,13 +53,16 @@ namespace Ribbons
 			rows = (uint)Math.Ceiling ((double)tiles.Count / columns);
 			
 			this.tileTable = new Table (rows, columns, true);
+			this.tileTable.Show ();
 			this.tileTable.HeightRequest = (int)rows * UnderlyingGallery.TileHeight;
 			this.tileTable.WidthRequest = (int)columns * UnderlyingGallery.TileWidth;
 			
 			Viewport vp = new Viewport ();
+			vp.Show ();
 			vp.Child = tileTable;
 			
 			this.internalWindow = new ScrolledWindow ();
+			this.internalWindow.Show ();
 			this.internalWindow.Child = vp;
 			this.internalWindow.HeightRequest = Math.Min (this.tileTable.HeightRequest, MAX_HEIGHT) + SCROLLBAR_SIZE;
 			this.internalWindow.WidthRequest = this.tileTable.WidthRequest + SCROLLBAR_SIZE;
@@ -67,6 +71,7 @@ namespace Ribbons
 			foreach(Tile t in tiles)
 			{
 				ExtraEventBox box = new ExtraEventBox ();
+				box.Show ();
 				box.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 				box.Child = t;
 				
@@ -81,6 +86,9 @@ namespace Ribbons
 			}
 			
 			this.Child = internalWindow;
+			this.Child.ButtonPressEvent += delegate (object o, ButtonPressEventArgs args)	{
+				args.RetVal = true;
+			};
 		}
 		
 		private void tile_Clicked (object Sender, EventArgs e)

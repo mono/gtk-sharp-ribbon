@@ -11,9 +11,11 @@ namespace Ribbons
 		protected Theme theme = new Theme ();
 		private int tileWidth, tileHeight;
 		private List<Tile> tiles;
-		private Button up, down, expand;
+		private Button up, down;
+		private ToggleButton expand;
 		private int defaultTilesPerRow;
 		private int tileSpacing;
+		private GalleryPopupWindow popup;
 		
 		private Tile selectedTile;
 		private int firstDisplayedTileIndex, lastDisplayedTileIndex;
@@ -76,6 +78,17 @@ namespace Ribbons
 		{
 			set
 			{
+				if(popup != null)
+				{
+					Grab.Remove(popup);
+					Gdk.Pointer.Ungrab(0);
+					Gdk.Keyboard.Ungrab(0);
+					
+					popup.Hide ();
+					popup.Destroy();
+					popup = null;
+				}
+				
 				if(selectedTile != null) selectedTile.Selected = false;
 				selectedTile = value;
 				if(selectedTile != null)
@@ -85,7 +98,7 @@ namespace Ribbons
 					int idx = tiles.FindIndex (delegate (Tile t) { return t == selectedTile; });
 					if(idx != -1)
 					{
-						firstDisplayedTileIndex = idx;
+						firstDisplayedTileIndex = idx/defaultTilesPerRow*defaultTilesPerRow;
 						lastDisplayedTileIndex = -1;
 						UpdateTilesLayout ();
 						QueueDraw ();
@@ -143,10 +156,10 @@ namespace Ribbons
 			this.down.Padding = 0;
 			this.down.Clicked += down_Clicked;
 			
-			this.expand = new Button ("\u2193");
+			this.expand = new ToggleButton ("\u2193");
 			this.expand.Parent = this;
 			this.expand.Padding = 0;
-			this.expand.Clicked += expand_Clicked;
+			this.expand.ValueChanged += expand_ValueChanged;
 		}
 		
 		/// <summary>Adds a tile before all existing tiles.</summary>
@@ -177,6 +190,9 @@ namespace Ribbons
 				tiles.Insert (TileIndex, t);
 			}
 			
+			if (tiles.Count == 1)
+				SelectedTile = t;
+			
 			//t.Parent = this;
 			t.Visible = true;
 			t.Clicked += Tile_Clicked;
@@ -204,17 +220,61 @@ namespace Ribbons
 			MoveDown ();
 		}
 		
-		private void expand_Clicked(object Sender, EventArgs e)
+		private void expand_ValueChanged(object Sender, EventArgs e)
 		{
-			GalleryPopupWindow popup = new GalleryPopupWindow (this);
-			popup.ShowAll ();
-			
-			int x, y;
-			ParentWindow.GetRootOrigin (out x, out y);
-			x += Allocation.X;
-			y += Allocation.Y;
-			
-			popup.GdkWindow.Move (x, y);
+			if(expand.Value)
+			{
+				popup = new GalleryPopupWindow (this);
+				popup.Realized += delegate {
+					int x, y;
+					ParentWindow.GetRootOrigin (out x, out y);
+					x += Allocation.X;
+					y += Allocation.Y;
+					popup.GdkWindow.Move (x, y);
+				};
+				
+				popup.Hidden += delegate {
+					expand.ValueChanged -= expand_ValueChanged;
+					expand.Value = false;
+					expand.QueueDraw ();
+					expand.ValueChanged += expand_ValueChanged;
+				};
+				popup.Show ();
+				
+				popup.ButtonReleaseEvent += OnButtonReleased;
+				popup.AddEvents ((int) Gdk.EventMask.ButtonPressMask);
+				Grab.Add(popup);
+
+				Gdk.GrabStatus grabbed = Gdk.Pointer.Grab(popup.GdkWindow, true, Gdk.EventMask.ButtonReleaseMask, null, null, 0);
+				if(grabbed == Gdk.GrabStatus.Success) {
+					grabbed = Gdk.Keyboard.Grab(popup.GdkWindow, true, 0);
+
+					if(grabbed != Gdk.GrabStatus.Success)
+					{
+						Grab.Remove(popup);
+						popup.Hide ();
+						popup.Destroy();
+						popup = null;
+						
+						return;
+					}
+				} else {
+					Grab.Remove(popup);
+					popup.Hide ();
+					popup.Destroy();
+					popup = null;
+				}
+			}
+			else
+			{
+				if (popup != null)
+				{
+					Grab.Remove(popup);
+					popup.Hide ();
+					popup.Destroy();
+					popup = null;
+				}
+			}
 		}
 		
 		private void Tile_Clicked(object Sender, EventArgs e)
@@ -254,6 +314,19 @@ namespace Ribbons
 			if(TileSelected != null) TileSelected (this, new TileSelectedEventArgs (SelectedTile));
 		}
 		
+		private void OnButtonReleased(object o, ButtonReleaseEventArgs args)
+		{
+			if(popup != null) {
+				Grab.Remove(popup);
+				Gdk.Pointer.Ungrab(0);
+				Gdk.Keyboard.Ungrab(0);
+
+				popup.Hide ();
+				popup.Destroy();
+				popup = null;
+			}
+		}
+
 		private void UpdateTilesLayout ()
 		{
 			Gdk.Rectangle tileAlloc;

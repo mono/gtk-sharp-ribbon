@@ -1,3 +1,10 @@
+2008-01-29  Laurent Debacker <debackerl@gmail.com> 
+
+	* Gallery.cs, GalleryPopupWindow.cs: * You can now click anywhere to close
+	  the popup. (Paweł 'X4lldux' Drygas).
+	
+	  * Proper tile selection. (Paweł 'X4lldux' Drygas).
+
 2008-01-24  Laurent Debacker <debackerl@gmail.com> 
 
 	* RibbonGroup.cs, Button.cs: Added signal names to enable accelerators.
