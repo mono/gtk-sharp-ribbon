@@ -20,6 +20,28 @@
 	
 	  * Fixed a typo in a comment.
 
+2008-06-01  Laurent Debacker <debackerl@gmail.com> 
+
+	* Ribbon.cs: 
+	
+	  * Add new Toolbar property to control the QuickAccessToolbar that
+	  belongs to a Ribbon.
+	
+	  * Update Size Request
+	
+	  * Update Allocations
+	
+	  * Bugfix in the allocation
+	
+	* QuickAccessToolbar.cs: 
+	
+	  * Initial commit of the new Quick Access Toolbar widget with bare metal
+	  API.
+	
+	* ToolBox.cs: 
+	
+	  * Fixed a typo in a comment.
+
 2008-01-29  Laurent Debacker <debackerl@gmail.com> 
 
 	* Gallery.cs, GalleryPopupWindow.cs: * You can now click anywhere to close
