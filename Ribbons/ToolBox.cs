@@ -34,7 +34,7 @@ namespace Ribbons
 			spacing = 2;
 		}
 		
-		/// <summary>Adds a widget before all existing widgetw.</summary>
+		/// <summary>Adds a widget before all existing widgets.</summary>
 		/// <param name="w">The widget to add.</param>
 		public void Prepend (Widget w)
 		{

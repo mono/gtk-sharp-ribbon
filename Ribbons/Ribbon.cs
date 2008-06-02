@@ -21,9 +21,11 @@ namespace Ribbons
 		
 		protected List<RibbonPage> pages;
 		protected int curPageIndex;
+		protected QuickAccessToolbar toolbar;
 		protected Widget shortcuts;
 		private Gdk.Rectangle bodyAllocation, pageAllocation;
 		
+		private Gtk.Requisition toolbarRequisition;
 		private Gtk.Requisition shortcutsRequisition;
 		private Gtk.Requisition pageRequisition;
 		private double headerHeight;
@@ -32,6 +34,25 @@ namespace Ribbons
 		public event PageAddedHandler PageAdded;
 		public event PageMovedHandler PageMoved;
 		public event PageRemovedHandler PageRemoved;
+		
+		public QuickAccessToolbar Toolbar
+		{
+			set
+			{
+				if(toolbar != null) toolbar.Unparent ();
+				toolbar = value;
+				if(toolbar != null)
+				{
+					toolbar.Visible = true;
+					toolbar.Parent = this;
+				}
+				ShowAll ();
+			}
+			get
+			{
+				return toolbar;
+			}
+		}
 		
 		/// <summary>Indix of the currently selected page.</summary>
 		/// <remakrs>Returns -1 if no page is selected.</remarks>
@@ -338,6 +359,12 @@ namespace Ribbons
 			
 			headerHeight = Math.Max (tabsHeight, shortcutsRequisition.Height);
 			
+			if(toolbar != null && toolbar.Visible)
+			{
+				toolbarRequisition = toolbar.SizeRequest ();
+				headerHeight += space + toolbarRequisition.Height;
+			}
+			
 			double pageWidth = 0, pageHeight = 0;
 			if(page != null)
 			{
@@ -365,8 +392,18 @@ namespace Ribbons
 			
 			if(allocation.Height < headerHeight + borderWidth) return;
 			
-			double headerBottom = allocation.X + borderWidth + headerHeight;
+			double headerBottom = allocation.Y + borderWidth + headerHeight;
 			double currentX = space;
+			
+			if(toolbar != null && toolbar.Visible)
+			{
+				Gdk.Rectangle alloc;
+				alloc.X = (int)currentX;
+				alloc.Y = (int)(allocation.Y + borderWidth);
+				alloc.Width = toolbarRequisition.Width;
+				alloc.Height = toolbarRequisition.Height;
+				toolbar.SizeAllocate (alloc);
+			}
 			
 			if(shortcuts != null && shortcuts.Visible)
 			{
