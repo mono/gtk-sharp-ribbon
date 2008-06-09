@@ -172,12 +172,23 @@ namespace Ribbons
 		}
 		
 		/// <summary>Draws a ribbon.</summary>
-		public void DrawRibbon (Context cr, Gdk.Rectangle bodyAllocation, double roundSize, double lineWidth, Ribbon widget)
+		public void DrawRibbon (Context cr, Gdk.Rectangle menuBarAllocation, Gdk.Rectangle bodyAllocation, double roundSize, double lineWidth, Ribbon widget)
 		{
 			double lineWidth05 = lineWidth / 2;
 			double lineWidth15 = 3 * lineWidth05;
 			double x0, x1, y0, y1;
 			LinearGradient linGrad;
+			
+			if(widget.QuickAccessToolbar != null)
+			{
+				cr.Rectangle (menuBarAllocation.X, menuBarAllocation.Y, menuBarAllocation.Width, menuBarAllocation.Height);
+				linGrad = new LinearGradient (0, menuBarAllocation.Y, 0, menuBarAllocation.Y + menuBarAllocation.Height);
+				linGrad.AddColorStop (0.0, new Color (1, 1, 1, 0.7));
+				linGrad.AddColorStop (1.0, new Color (1, 1, 1, 0.0));
+				cr.Pattern = linGrad;
+				cr.Fill ();
+				linGrad.Destroy ();
+			}
 			
 			Ribbon.RibbonPage p = widget.CurrentPage;
 			if(p != null)
@@ -208,7 +219,7 @@ namespace Ribbons
 					cr.Stroke ();
 					
 					/*** GLASS EFFECT ***/
-					double ymid = Math.Round(y0 + (y1 - y0) * 0.25);
+					double ymid = Math.Round (y0 + (y1 - y0) * 0.25);
 					
 					cr.Arc (x0 + roundSize, y0 + roundSize, roundSize - lineWidth, Math.PI, 3*Math.PI/2);
 					cr.Arc (x1 - roundSize, y0 + roundSize, roundSize - lineWidth, 3*Math.PI/2, 0);

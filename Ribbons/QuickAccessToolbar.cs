@@ -10,7 +10,7 @@ namespace Ribbons
 		
 		public QuickAccessToolbar()
 		{
-			
+			widgets = new List<Widget> ();
 		}
 		
 		/// <summary>Adds a widget before all existing widgets.</summary>
@@ -63,6 +63,14 @@ namespace Ribbons
 			{
 				if(w.Visible) callback (w);
 			}
+		}
+		
+		protected override void OnSizeRequested (ref Requisition requisition)
+		{
+			base.OnSizeRequested (ref requisition);
+			
+			requisition.Width = 16;
+			requisition.Height = 16;
 		}
 	}
 }

@@ -1,3 +1,17 @@
+2008-06-05  Laurent Debacker <debackerl@gmail.com> 
+
+	* Ribbon.cs: 
+	
+	  * More work a the layout of the QuickAccessToolbar
+	
+	* QuickAccessToolbar.cs: 
+	
+	  * Add minimal code to be able to use it as a child widget in the demo.
+	
+	* Theme.cs: 
+	
+	  * Drawing of the QuickAccessToolbar's background.
+
 2008-06-01  Laurent Debacker <debackerl@gmail.com> 
 
 	* Ribbon.cs: 

@@ -35,7 +35,7 @@ namespace Ribbons
 		public event PageMovedHandler PageMoved;
 		public event PageRemovedHandler PageRemoved;
 		
-		public QuickAccessToolbar Toolbar
+		public QuickAccessToolbar QuickAccessToolbar
 		{
 			set
 			{
@@ -362,7 +362,7 @@ namespace Ribbons
 			if(toolbar != null && toolbar.Visible)
 			{
 				toolbarRequisition = toolbar.SizeRequest ();
-				headerHeight += space + toolbarRequisition.Height;
+				headerHeight += 2 * space + toolbarRequisition.Height;
 			}
 			
 			double pageWidth = 0, pageHeight = 0;
@@ -400,7 +400,7 @@ namespace Ribbons
 				Gdk.Rectangle alloc;
 				alloc.X = (int)currentX;
 				alloc.Y = (int)(allocation.Y + borderWidth);
-				alloc.Width = toolbarRequisition.Width;
+				alloc.Width = Math.Min (toolbarRequisition.Width, (int)(allocation.Width - 2 * space));
 				alloc.Height = toolbarRequisition.Height;
 				toolbar.SizeAllocate (alloc);
 			}
@@ -470,7 +470,16 @@ namespace Ribbons
 		
 		protected void Draw (Context cr)
 		{
-			theme.DrawRibbon (cr, bodyAllocation, roundSize, lineWidth, this);
+			Gdk.Rectangle menuBarAllocation;
+			menuBarAllocation.X = Allocation.X;
+			menuBarAllocation.Y = Allocation.Y;
+			menuBarAllocation.Width = Allocation.Width;
+			if(QuickAccessToolbar == null)
+				menuBarAllocation.Height = 0;
+			else
+				menuBarAllocation.Height = (int)(toolbar.Allocation.Height + 2 * space);
+			
+			theme.DrawRibbon (cr, menuBarAllocation, bodyAllocation, roundSize, lineWidth, this);
 		}
 		
 		protected virtual void OnPageSelected (PageEventArgs args)
