@@ -179,7 +179,7 @@ namespace Ribbons
 			double x0, x1, y0, y1;
 			LinearGradient linGrad;
 			
-			if(widget.QuickAccessToolbar != null)
+			if(menuBarAllocation.Height > 0)
 			{
 				cr.Rectangle (menuBarAllocation.X, menuBarAllocation.Y, menuBarAllocation.Width, menuBarAllocation.Height);
 				linGrad = new LinearGradient (0, menuBarAllocation.Y, 0, menuBarAllocation.Y + menuBarAllocation.Height);
@@ -310,6 +310,13 @@ namespace Ribbons
 				cr.Color = new Color (0, 0, 0, 0.2);
 				cr.Stroke ();
 			}
+		}
+		
+		/// <summary>Draws an application button.</summary>
+		public void DrawApplicationButton (Context cr, Rectangle bodyAllocation, ButtonState state, double lineWidth, BaseButton widget)
+		{
+			cr.Color = new Color(1, 0, 0);
+			cr.Fill ();
 		}
 		
 		/// <summary>Draws a button.</summary>

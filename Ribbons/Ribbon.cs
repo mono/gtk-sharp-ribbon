@@ -21,10 +21,12 @@ namespace Ribbons
 		
 		protected List<RibbonPage> pages;
 		protected int curPageIndex;
+		protected ApplicationButton appButton;
 		protected QuickAccessToolbar toolbar;
 		protected Widget shortcuts;
 		private Gdk.Rectangle bodyAllocation, pageAllocation;
 		
+		private Gtk.Requisition appButtonRequisition;
 		private Gtk.Requisition toolbarRequisition;
 		private Gtk.Requisition shortcutsRequisition;
 		private Gtk.Requisition pageRequisition;
@@ -34,6 +36,25 @@ namespace Ribbons
 		public event PageAddedHandler PageAdded;
 		public event PageMovedHandler PageMoved;
 		public event PageRemovedHandler PageRemoved;
+		
+		public ApplicationButton ApplicationButton
+		{
+			set
+			{
+				if(appButton != null) appButton.Unparent ();
+				appButton = value;
+				if(appButton != null)
+				{
+					appButton.Visible = true;
+					appButton.Parent = this;
+				}
+				ShowAll ();
+			}
+			get
+			{
+				return appButton;
+			}
+		}
 		
 		public QuickAccessToolbar QuickAccessToolbar
 		{
@@ -359,10 +380,19 @@ namespace Ribbons
 			
 			headerHeight = Math.Max (tabsHeight, shortcutsRequisition.Height);
 			
-			if(toolbar != null && toolbar.Visible)
+			bool showToolbar = toolbar != null && toolbar.Visible;
+			bool showAppButton = appButton != null && appButton.Visible;
+			
+			if(showToolbar) toolbarRequisition = toolbar.SizeRequest ();
+			if(showAppButton) appButtonRequisition = appButton.SizeRequest ();
+			
+			if(showToolbar && (!showAppButton || appButton.HeightRequest < toolbar.HeightRequest))
 			{
-				toolbarRequisition = toolbar.SizeRequest ();
 				headerHeight += 2 * space + toolbarRequisition.Height;
+			}
+			else if(showAppButton)
+			{
+				headerHeight += 2 * space + appButtonRequisition.Height;
 			}
 			
 			double pageWidth = 0, pageHeight = 0;
@@ -395,12 +425,32 @@ namespace Ribbons
 			double headerBottom = allocation.Y + borderWidth + headerHeight;
 			double currentX = space;
 			
-			if(toolbar != null && toolbar.Visible)
+			bool showToolbar = toolbar != null && toolbar.Visible;
+			bool showAppButton = appButton != null && appButton.Visible;
+			
+			if(showAppButton)
 			{
 				Gdk.Rectangle alloc;
 				alloc.X = (int)currentX;
 				alloc.Y = (int)(allocation.Y + borderWidth);
-				alloc.Width = Math.Min (toolbarRequisition.Width, (int)(allocation.Width - 2 * space));
+				alloc.Width = Math.Min (appButtonRequisition.Width, (int)(allocation.Width - 2 * space));
+				alloc.Height = appButtonRequisition.Height;
+				appButton.SizeAllocate (alloc);
+			}
+			
+			if(showToolbar)
+			{
+				Gdk.Rectangle alloc;
+				if(showAppButton)
+				{
+					alloc.X = (int)(currentX + appButton.Allocation.Width + space);
+				}
+				else
+				{
+					alloc.X = (int)currentX;
+				}
+				alloc.Y = (int)(allocation.Y + borderWidth);
+				alloc.Width = Math.Min (toolbarRequisition.Width, (int)(allocation.Width - (alloc.X - allocation.X) - space));
 				alloc.Height = toolbarRequisition.Height;
 				toolbar.SizeAllocate (alloc);
 			}

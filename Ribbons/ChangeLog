@@ -1,3 +1,9 @@
+2008-06-06  Laurent Debacker <debackerl@gmail.com> 
+
+	* Theme.cs: Stub for the application button.
+	* Ribbon.cs: Support for the application button.
+	* ApplicationButton.cs: Initial commit.
+
 2008-06-05  Laurent Debacker <debackerl@gmail.com> 
 
 	* Ribbon.cs: 
