@@ -6,7 +6,8 @@ namespace Ribbons
 {
 	public class QuickAccessToolbar : Container
 	{
-		private List<Widget> widgets;		
+		private List<Widget> widgets;
+		private int[] widths;
 		
 		public QuickAccessToolbar()
 		{
@@ -69,8 +70,42 @@ namespace Ribbons
 		{
 			base.OnSizeRequested (ref requisition);
 			
-			requisition.Width = 16;
+			if(widths == null || widths.Length != widgets.Count)
+			{
+				widths = new int[widgets.Count];
+			}
+			
 			requisition.Height = 16;
+			requisition.Width = 0;
+			
+			int i = 0;
+			foreach(BaseButton b in widgets)
+			{
+				b.HeightRequest = requisition.Height;
+				Gtk.Requisition req = b.SizeRequest ();
+				requisition.Width += req.Width;
+				widths[i++] = req.Width;
+			}
+			if(HeightRequest != -1) requisition.Height = HeightRequest;
+			if(WidthRequest != -1) requisition.Width = WidthRequest;
+		}
+		
+		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
+		{
+			base.OnSizeAllocated (allocation);
+			
+			int i = 0, x = allocation.X;
+			foreach(BaseButton b in widgets)
+			{
+				Gdk.Rectangle r;
+				r.X = x;
+				r.Y = allocation.Y;
+				r.Width = widths[i];
+				r.Height = allocation.Height;
+				b.SizeAllocate (r);
+				x += r.Width;
+				++i;
+			}
 		}
 	}
 }
