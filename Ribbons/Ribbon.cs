@@ -398,11 +398,12 @@ namespace Ribbons
 			
 			if(showToolbar && (!showAppButton || appButton.HeightRequest < toolbar.HeightRequest))
 			{
-				headerHeight += 2 * space + toolbarRequisition.Height;
+				headerHeight += 3 * space + toolbarRequisition.Height;
 			}
-			else if(showAppButton)
+			
+			if(showAppButton)
 			{
-				headerHeight += 2 * space + appButtonRequisition.Height;
+				headerHeight = Math.Max (headerHeight, space + appButtonRequisition.Height);
 			}
 			
 			double pageWidth = 0, pageHeight = 0;
@@ -433,7 +434,7 @@ namespace Ribbons
 			if(allocation.Height < headerHeight + borderWidth) return;
 			
 			double headerBottom = allocation.Y + borderWidth + headerHeight;
-			double currentX = space;
+			double currentX = borderWidth;
 			
 			bool showToolbar = toolbar != null && toolbar.Visible;
 			bool showAppButton = appButton != null && appButton.Visible;
@@ -446,22 +447,17 @@ namespace Ribbons
 				alloc.Width = Math.Min (appButtonRequisition.Width, (int)(allocation.Width - 2 * space));
 				alloc.Height = appButtonRequisition.Height;
 				appButton.SizeAllocate (alloc);
+				
+				currentX += alloc.Width + space;
 			}
 			
 			if(showToolbar)
 			{
 				Gdk.Rectangle alloc;
-				if(showAppButton)
-				{
-					alloc.X = (int)(currentX + appButton.Allocation.Width + space);
-				}
-				else
-				{
-					alloc.X = (int)currentX;
-				}
+				alloc.X = (int)currentX;
 				alloc.Y = (int)(allocation.Y + borderWidth);
 				alloc.Width = Math.Min (toolbarRequisition.Width, (int)(allocation.Width - (alloc.X - allocation.X) - space));
-				alloc.Height = toolbarRequisition.Height;
+				alloc.Height = (int)(toolbarRequisition.Height + 2 * space);
 				toolbar.SizeAllocate (alloc);
 			}
 			

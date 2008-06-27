@@ -318,7 +318,18 @@ namespace Ribbons
 			double radius = bodyAllocation.Height / 2;
 			
 			cr.Arc (bodyAllocation.X + radius, bodyAllocation.Y + radius, radius, 0, 2 * Math.PI);
-			cr.Color = new Color (0.8, 0.8, 0.8);
+			switch(state)
+			{
+			case ButtonState.Hover:
+				cr.Color = new Color (0.9, 0.815, 0.533);
+				break;
+			case ButtonState.Pressed:
+				cr.Color = new Color (0.886, 0.639, 0.356);
+				break;
+			default:
+				cr.Color = new Color (0.8, 0.8, 0.8);
+				break;
+			}
 			cr.Fill ();
 			
 			cr.Arc (bodyAllocation.X + radius, bodyAllocation.Y + radius, radius, 0, 2 * Math.PI);

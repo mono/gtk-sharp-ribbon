@@ -14,8 +14,14 @@ namespace Ribbons
 		
 		public ApplicationButton()
 		{
+			this.SetFlag (WidgetFlags.NoWindow);
+			
+			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			
 			HeightRequest = 36;
 			WidthRequest = 36;
+			
+			this.enable = true;
 		}
 		
 		/// <summary>Fires the Click event.</summary>
