@@ -335,6 +335,16 @@ namespace Ribbons
 		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
+			if(toolbar != null && toolbar.Visible)
+			{
+				callback (toolbar);
+			}
+			
+			if(appButton != null && appButton.Visible)
+			{
+				callback (appButton);
+			}
+			
 			if(Shortcuts != null && Shortcuts.Visible)
 			{
 				callback (Shortcuts);

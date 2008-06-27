@@ -1,3 +1,10 @@
+2008-06-22  Laurent Debacker <debackerl@gmail.com> 
+
+	* QuickAccessToolbar.cs: Bugfix, add NO_WINDOW flag
+	* Theme.cs: Implement final app button theme
+	* Ribbon.cs: Bugfix, call app button and quick access toolbar when calling
+	  children
+
 2008-06-19  Laurent Debacker <debackerl@gmail.com> 
 
 	* QuickAccessToolbar.cs: Implement size request and size allocation.

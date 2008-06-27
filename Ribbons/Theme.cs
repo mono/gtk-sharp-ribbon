@@ -315,8 +315,56 @@ namespace Ribbons
 		/// <summary>Draws an application button.</summary>
 		public void DrawApplicationButton (Context cr, Rectangle bodyAllocation, ButtonState state, double lineWidth, BaseButton widget)
 		{
-			cr.Color = new Color(1, 0, 0);
+			double radius = bodyAllocation.Height / 2;
+			
+			cr.Arc (bodyAllocation.X + radius, bodyAllocation.Y + radius, radius, 0, 2 * Math.PI);
+			cr.Color = new Color (0.8, 0.8, 0.8);
 			cr.Fill ();
+			
+			cr.Arc (bodyAllocation.X + radius, bodyAllocation.Y + radius, radius, 0, 2 * Math.PI);
+			LinearGradient linGrad = new LinearGradient (0, bodyAllocation.Y, 0, bodyAllocation.Y + bodyAllocation.Height);
+			linGrad.AddColorStop (0.0, new Color (1, 1, 1, 0.9));
+			linGrad.AddColorStop (0.5, new Color (1, 1, 1, 0.0));
+			linGrad.AddColorStop (1.0, new Color (1, 1, 1, 1.0));
+			cr.Pattern = linGrad;
+			cr.Fill ();
+			linGrad.Destroy ();
+			
+			cr.Arc (bodyAllocation.X + radius, bodyAllocation.Y + radius, radius, 0, 2 * Math.PI);
+			linGrad = new LinearGradient (0, bodyAllocation.Y, 0, bodyAllocation.Y + bodyAllocation.Height);
+			linGrad.AddColorStop (0.0, new Color (0, 0, 0, 0.0));
+			linGrad.AddColorStop (0.4, new Color (0, 0, 0, 0.0));
+			linGrad.AddColorStop (0.5, new Color (0, 0, 0, 0.1));
+			linGrad.AddColorStop (0.75, new Color (0, 0, 0, 0.0));
+			linGrad.AddColorStop (1.0, new Color (0, 0, 0, 0.0));
+			cr.Pattern = linGrad;
+			cr.Fill ();
+			linGrad.Destroy ();
+			
+			cr.Arc (bodyAllocation.X + radius, bodyAllocation.Y + radius, radius, 0, Math.PI);
+			linGrad = new LinearGradient (0, bodyAllocation.Y + radius, 0, bodyAllocation.Y + bodyAllocation.Height);
+			linGrad.AddColorStop (0.0, new Color (0, 0, 0, 0.0));
+			linGrad.AddColorStop (1.0, new Color (0, 0, 0, 0.5));
+			cr.Pattern = linGrad;
+			cr.LineWidth = 1.0;
+			cr.Stroke ();
+			linGrad.Destroy ();
+			
+			cr.Arc (bodyAllocation.X + radius, bodyAllocation.Y + radius, radius, Math.PI, 0);
+			linGrad = new LinearGradient (0, bodyAllocation.Y, 0, bodyAllocation.Y + radius);
+			linGrad.AddColorStop (0.0, new Color (1, 1, 1, 0.5));
+			linGrad.AddColorStop (1.0, new Color (1, 1, 1, 0.0));
+			cr.LineWidth = 1.0;
+			cr.Stroke ();
+			linGrad.Destroy ();
+			
+			cr.Arc (bodyAllocation.X + radius, bodyAllocation.Y + radius, radius, 0, 2 * Math.PI);
+			RadialGradient radGrad = new RadialGradient (bodyAllocation.X + radius, bodyAllocation.Y + 1.5 * radius, 0, bodyAllocation.X + radius, bodyAllocation.Y + 1.5 * radius, 0.5 * radius);
+			radGrad.AddColorStop (0, new Color (1, 1, 1, 0.4));
+			radGrad.AddColorStop (1, new Color (1, 1, 1, 0.0));
+			cr.Pattern = radGrad;
+			cr.Fill ();
+			radGrad.Destroy ();
 		}
 		
 		/// <summary>Draws a button.</summary>

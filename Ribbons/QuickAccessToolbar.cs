@@ -11,7 +11,12 @@ namespace Ribbons
 		
 		public QuickAccessToolbar()
 		{
-			widgets = new List<Widget> ();
+			// This is a No Window widget => it does not have its own Gdk Window => it can be transparent
+			this.SetFlag (WidgetFlags.NoWindow);
+			
+			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			
+			this.widgets = new List<Widget> ();
 		}
 		
 		/// <summary>Adds a widget before all existing widgets.</summary>
