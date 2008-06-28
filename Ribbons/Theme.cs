@@ -181,13 +181,21 @@ namespace Ribbons
 			
 			if(menuBarAllocation.Height > 0)
 			{
-				cr.Rectangle (menuBarAllocation.X, menuBarAllocation.Y, menuBarAllocation.Width, menuBarAllocation.Height);
-				linGrad = new LinearGradient (0, menuBarAllocation.Y, 0, menuBarAllocation.Y + menuBarAllocation.Height);
-				linGrad.AddColorStop (0.0, new Color (1, 1, 1, 0.7));
-				linGrad.AddColorStop (1.0, new Color (1, 1, 1, 0.0));
+				cr.Rectangle (menuBarAllocation.X, menuBarAllocation.Y, menuBarAllocation.Width, menuBarAllocation.Height - 1);
+				linGrad = new LinearGradient (0, menuBarAllocation.Y, 0, menuBarAllocation.Y + menuBarAllocation.Height - 1);
+				linGrad.AddColorStop (0.0, new Color (1, 1, 1, 0.5));
+				linGrad.AddColorStop (0.3, new Color (1, 1, 1, 0.2));
+				linGrad.AddColorStop (0.3, new Color (1, 1, 1, 0.0));
+				linGrad.AddColorStop (1.0, new Color (1, 1, 1, 0.5));
 				cr.Pattern = linGrad;
 				cr.Fill ();
 				linGrad.Destroy ();
+				
+				cr.MoveTo (menuBarAllocation.X, menuBarAllocation.Bottom + 0.5);
+				cr.LineTo (menuBarAllocation.Right, menuBarAllocation.Bottom + 0.5);
+				cr.Color = new Color (1, 1, 1, 0.5);
+				cr.LineWidth = 1;
+				cr.Stroke();
 			}
 			
 			Ribbon.RibbonPage p = widget.CurrentPage;

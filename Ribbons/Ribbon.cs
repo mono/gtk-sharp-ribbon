@@ -396,9 +396,9 @@ namespace Ribbons
 			if(showToolbar) toolbarRequisition = toolbar.SizeRequest ();
 			if(showAppButton) appButtonRequisition = appButton.SizeRequest ();
 			
-			if(showToolbar && (!showAppButton || appButton.HeightRequest < toolbar.HeightRequest))
+			if(showToolbar)
 			{
-				headerHeight += 3 * space + toolbarRequisition.Height;
+				headerHeight += 2 * space + toolbarRequisition.Height;
 			}
 			
 			if(showAppButton)
@@ -455,9 +455,9 @@ namespace Ribbons
 			{
 				Gdk.Rectangle alloc;
 				alloc.X = (int)currentX;
-				alloc.Y = (int)(allocation.Y + borderWidth);
+				alloc.Y = (int)(allocation.Y + space);
 				alloc.Width = Math.Min (toolbarRequisition.Width, (int)(allocation.Width - (alloc.X - allocation.X) - space));
-				alloc.Height = (int)(toolbarRequisition.Height + 2 * space);
+				alloc.Height = toolbarRequisition.Height;
 				toolbar.SizeAllocate (alloc);
 			}
 			
@@ -526,14 +526,17 @@ namespace Ribbons
 		
 		protected void Draw (Context cr)
 		{
+			bool showToolbar = toolbar != null && toolbar.Visible;
+			
 			Gdk.Rectangle menuBarAllocation;
 			menuBarAllocation.X = Allocation.X;
 			menuBarAllocation.Y = Allocation.Y;
 			menuBarAllocation.Width = Allocation.Width;
-			if(QuickAccessToolbar == null)
-				menuBarAllocation.Height = 0;
-			else
+			
+			if(showToolbar)
 				menuBarAllocation.Height = (int)(toolbar.Allocation.Height + 2 * space);
+			else
+				menuBarAllocation.Height = 0;
 			
 			theme.DrawRibbon (cr, menuBarAllocation, bodyAllocation, roundSize, lineWidth, this);
 		}
