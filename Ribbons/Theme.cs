@@ -315,7 +315,14 @@ namespace Ribbons
 		/// <summary>Draws an application button.</summary>
 		public void DrawApplicationButton (Context cr, Rectangle bodyAllocation, ButtonState state, double lineWidth, BaseButton widget)
 		{
-			double radius = bodyAllocation.Height / 2;
+			const double dropShadowOffset = 1;
+			double radius = (bodyAllocation.Height - dropShadowOffset) / 2;
+			
+			double x = bodyAllocation.X + radius + dropShadowOffset;
+			double y = bodyAllocation.Y + radius + dropShadowOffset;
+			cr.Arc (x, y, radius, 0, 2 * Math.PI);
+			cr.Color = new Color (0, 0, 0, 0.5);
+			cr.Fill ();
 			
 			cr.Arc (bodyAllocation.X + radius, bodyAllocation.Y + radius, radius, 0, 2 * Math.PI);
 			switch(state)

@@ -1,5 +1,9 @@
 2008-06-22  Laurent Debacker <debackerl@gmail.com> 
 
+	* Theme.cs: Implementation of the required drop shadow for the app button
+
+2008-06-22  Laurent Debacker <debackerl@gmail.com> 
+
 	* Theme.cs: Change background color depending on current state
 	* Ribbon.cs: Bugfix for layout code
 	* ApplicationButton.cs: Bugfix for widget initialization
