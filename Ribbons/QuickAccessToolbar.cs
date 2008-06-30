@@ -86,8 +86,9 @@ namespace Ribbons
 			int i = 0;
 			foreach(BaseButton b in widgets)
 			{
-				b.HeightRequest = requisition.Height;
+				//b.HeightRequest = requisition.Height;
 				Gtk.Requisition req = b.SizeRequest ();
+				if(req.Height > requisition.Height) requisition.Height = req.Height;
 				requisition.Width += req.Width;
 				widths[i++] = req.Width;
 			}

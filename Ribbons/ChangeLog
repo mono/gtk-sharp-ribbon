@@ -1,3 +1,9 @@
+2008-06-23  Laurent Debacker <debackerl@gmail.com> 
+
+	* Theme.cs: Quick Access Toolbar background
+	* ApplicationMenu.cs: Initial stub API for application menu.
+	* QuickAccessToolbar.cs: Take care of height requests from children widgets
+
 2008-06-22  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Title bar's background is not compliant

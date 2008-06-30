@@ -195,7 +195,79 @@ namespace Ribbons
 				cr.LineTo (menuBarAllocation.Right, menuBarAllocation.Bottom + 0.5);
 				cr.Color = new Color (1, 1, 1, 0.5);
 				cr.LineWidth = 1;
-				cr.Stroke();
+				cr.Stroke ();
+				
+				// Quick Access Toolbar background
+				
+				Gdk.Rectangle alloc = widget.QuickAccessToolbar.Allocation;
+				x0 = alloc.X;
+				x1 = alloc.Right - 1;
+				y0 = alloc.Y;
+				y1 = alloc.Bottom - 1;
+				double radius = (y1 - y0) / 2;
+				
+				Gdk.Rectangle alloc2 = widget.ApplicationButton.Allocation;
+				double cx = alloc2.X + alloc2.Width / 2;
+				double cy = alloc2.Y + alloc2.Height / 2;
+				double radius2 = x0 - cx;
+				double alpha = Math.Asin ((y0 - cy) / radius2);
+				double beta = Math.Asin ((y1 - cy) / radius2);
+				double curveWidth0 = Math.Cos (Math.Abs (alpha)) * radius2;
+				double curveWidth1 = Math.Cos (Math.Abs (beta)) * radius2;
+				double curveWidth = Math.Min (curveWidth0, curveWidth1);
+				cr.LineWidth = 1;
+				
+				cr.Save ();
+				cr.Rectangle (cx + curveWidth, y0, curveWidth + alloc.Width + 2, alloc.Height);
+				cr.ClipPreserve ();
+				cr.ArcNegative (cx, cy, radius2, -alpha, -beta);
+				linGrad = new LinearGradient (0, y0, 0, y1);
+				linGrad.AddColorStop (0.0, colorScheme.Bright);
+				linGrad.AddColorStop (1.0, colorScheme.PrettyDark);
+				cr.Pattern = linGrad;
+				//cr.Color = new Color (1, 0, 0);
+				cr.Fill ();
+				cr.Restore ();
+				cr.Arc (x1, y0 + radius, radius - 0.5, 1.5 * Math.PI, 0.5 * Math.PI);
+				cr.Pattern = linGrad;
+				cr.Fill ();
+				linGrad.Destroy ();
+				
+				cr.Arc (cx, cy, radius2, alpha, beta);
+				cr.Color = new Color (0, 0, 0, 0.6);
+				cr.Stroke ();
+				radius2 -= 1;
+				cr.Arc (cx, cy, radius2, alpha, beta);
+				cr.Color = new Color (1, 1, 1, 0.4);
+				cr.Stroke ();
+				
+				cr.MoveTo (cx + curveWidth0, y0 - 0.5);
+				cr.LineTo (x1, y0 - 0.5);
+				cr.Color = new Color (1, 1, 1, 0.4);
+				cr.Stroke ();
+				
+				cr.MoveTo (cx + curveWidth0, y0 + 0.5);
+				cr.LineTo (x1, y0 + 0.5);
+				cr.Color = new Color (0, 0, 0, 0.6);
+				cr.Stroke ();
+				
+				cr.MoveTo (cx + curveWidth1, y1 - 0.5);
+				cr.LineTo (x1, y1 - 0.5);
+				cr.Color = new Color (0, 0, 0, 0.6);
+				cr.Stroke ();
+				
+				cr.MoveTo (cx + curveWidth1, y1 + 0.5);
+				cr.LineTo (x1, y1 + 0.5);
+				cr.Color = new Color (1, 1, 1, 0.4);
+				cr.Stroke ();
+				
+				cr.Arc (x1, y0 + radius, radius + 0.5, 1.5 * Math.PI, 0.5 * Math.PI);
+				cr.Color = new Color (1, 1, 1, 0.4);
+				cr.Stroke ();
+				
+				cr.Arc (x1, y0 + radius, radius - 0.5, 1.5 * Math.PI, 0.5 * Math.PI);
+				cr.Color = new Color (0, 0, 0, 0.6);
+				cr.Stroke ();
 			}
 			
 			Ribbon.RibbonPage p = widget.CurrentPage;

@@ -129,8 +129,14 @@ namespace Sample
 				mainMenu.ShowAll ();
 			};
 			
+			QuickAccessToolbar qat = new QuickAccessToolbar ();
+			qat.Append (Ribbons.Button.FromStockIcon (Gtk.Stock.New, false));
+			qat.Append (Ribbons.Button.FromStockIcon (Gtk.Stock.Save, false));
+			
 			ribbon = new Ribbon ();
-			ribbon.Shortcuts = shortcuts;
+			ribbon.ApplicationButton = new ApplicationButton ();
+			ribbon.QuickAccessToolbar = qat;
+			//ribbon.Shortcuts = shortcuts;
 			ribbon.AppendPage (page0, pageLabel0);
 			ribbon.AppendPage (page1, pageLabel1);
 			ribbon.AppendPage (page2, pageLabel2);
@@ -179,10 +185,12 @@ namespace Sample
 			Gdk.EventExpose evnt = args.Event;
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
 			
-			if(composeAvailable)
+			/*if(composeAvailable)
 				cr.SetSourceRGBA (0, 0, 0, 0.3);
-			else
+			else*/
 				cr.SetSourceRGB (0.3, 0.3, 0.3);
+			
+			//cr.SetSourceRGB (0.749, 0.859, 1.0);
 			
 			cr.Operator = Operator.Source;
 			cr.Paint ();

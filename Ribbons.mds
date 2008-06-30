@@ -14,7 +14,7 @@
     <Execute type="None" entry="Sample" />
   </StartMode>
   <Entries>
-    <Entry filename="./Ribbons/Ribbons.mdp" />
-    <Entry filename="./Sample/Sample.mdp" />
+    <Entry filename="Ribbons/Ribbons.mdp" />
+    <Entry filename="Sample/Sample.mdp" />
   </Entries>
 </Combine>
