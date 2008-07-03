@@ -1,3 +1,8 @@
+2008-06-24  Laurent Debacker <debackerl@gmail.com> 
+
+	* Theme.cs: Fix background theme for Quick Access Toolbar when there is no
+	  app button
+
 2008-06-23  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Quick Access Toolbar background
