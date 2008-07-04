@@ -1,5 +1,9 @@
 2008-06-24  Laurent Debacker <debackerl@gmail.com> 
 
+	* ApplicationMenu.cs: Size requisition for app menu
+
+2008-06-24  Laurent Debacker <debackerl@gmail.com> 
+
 	* Theme.cs: Fix background theme for Quick Access Toolbar when there is no
 	  app button
 
