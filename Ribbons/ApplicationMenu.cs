@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Gtk;
+using Cairo;
 
 namespace Ribbons
 {
@@ -8,6 +9,8 @@ namespace Ribbons
 	{
 		private static int borderWidth = 2;
 		private static int space = 2;
+		
+		protected Theme theme = new Theme ();
 		
 		private List<MenuItem> items;
 		private Widget defaultMenu;
@@ -20,19 +23,41 @@ namespace Ribbons
 		private int buttonsHeight;
 		private int exitBtnWidth, optionsBtnWidth;
 		private int visibleMenuItems;
+		private bool activeMenuVisible;
+		private bool optionsBtnVisible, exitBtnVisible;
 		
-		[GLib.Signal("options_clicked")]
-		public event EventHandler OptionClicked;
+		public Button OptionsButton
+		{
+			get { return optionsBtn; }
+			set
+			{
+				if(optionsBtn == value) return;
+				optionsBtn = value;
+				if(value == null) optionsBtnVisible = false;
+				ShowAll ();
+			}
+		}
 		
-		[GLib.Signal("exit_clicked")]
-		public event EventHandler ExitClicked;
+		public Button ExitButton
+		{
+			get { return exitBtn; }
+			set
+			{
+				if(exitBtn == value) return;
+				exitBtn = value;
+				if(value == null) exitBtnVisible = false;
+				ShowAll ();
+			}
+		}
 		
 		public int ItemHeigth
 		{
 			get { return itemHeight; }
 			set
 			{
-				throw new NotImplementedException();
+				if(itemHeight == value) return;
+				itemHeight = value;
+				ShowAll ();
 			}
 		}
 		
@@ -41,11 +66,14 @@ namespace Ribbons
 			get { return defaultMenu; }
 			set
 			{
-				throw new NotImplementedException();
+				Widget prevDefaultMenu = defaultMenu;
+				if(defaultMenu == value) return;
+				defaultMenu = value;
+				if(activeMenu == prevDefaultMenu) ShowAll ();
 			}
 		}
 		
-		public ApplicationMenu (Gtk.WindowType type) : base (type)
+		public ApplicationMenu () : base (Gtk.WindowType.Popup)
 		{
 			items = new List<MenuItem> ();
 		}
@@ -105,9 +133,10 @@ namespace Ribbons
 			{
 				if(mi.Visible)
 				{
+					mi.HeightRequest = itemHeight;
 					Gtk.Requisition req = mi.SizeRequest ();
 					if(req.Width > menuItemsColWidth) menuItemsColWidth = req.Width;
-					menuItemsColHeight += req.Height;
+					menuItemsColHeight += itemHeight;
 				}
 			}
 			
@@ -231,6 +260,26 @@ namespace Ribbons
 					}
 				}
 			}
+		}
+		
+		protected override bool OnExposeEvent (Gdk.EventExpose evnt)
+		{
+			Context cr = Gdk.CairoHelper.Create (this.GdkWindow);
+			
+			cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+			cr.Clip ();
+			Draw (cr);
+			
+			((IDisposable)cr.Target).Dispose ();
+			((IDisposable)cr).Dispose ();
+			
+			return base.OnExposeEvent (evnt);
+		}
+		
+		protected void Draw (Context cr)
+		{
+			Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
+			theme.DrawApplicationMenu (cr, rect, this);
 		}
 		
 		

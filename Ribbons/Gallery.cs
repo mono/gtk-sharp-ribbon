@@ -227,7 +227,7 @@ namespace Ribbons
 				popup = new GalleryPopupWindow (this);
 				popup.Realized += delegate {
 					int x, y;
-					ParentWindow.GetRootOrigin (out x, out y);
+					ParentWindow.GetOrigin (out x, out y);
 					x += Allocation.X;
 					y += Allocation.Y;
 					popup.GdkWindow.Move (x, y);

@@ -1,3 +1,8 @@
+2008-06-25  Laurent Debacker <debackerl@gmail.com> 
+
+	* ApplicationButton.cs: Bugfixes for popup position, and misc other bug
+	  fixes
+
 2008-06-24  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenu.cs: Implementation of SizeAllocated for app menu, and more

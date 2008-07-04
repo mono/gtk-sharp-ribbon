@@ -8,15 +8,24 @@ namespace Ribbons
 	{
 		protected const double lineWidth = 1.0;
 		
+		private ApplicationMenu appMenu;
+		
 		/// <summary>Fired when the button is clicked.</summary>
 		[GLib.Signal("clicked")]
 		public event EventHandler Clicked;
+		
+		public ApplicationMenu Menu
+		{
+			get { return appMenu; }
+		}
 		
 		public ApplicationButton()
 		{
 			this.SetFlag (WidgetFlags.NoWindow);
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			
+			appMenu = new ApplicationMenu ();
 			
 			HeightRequest = 36;
 			WidthRequest = 36;
@@ -28,6 +37,16 @@ namespace Ribbons
 		public void Click ()
 		{
 			if(enable && Clicked != null) Clicked (this, EventArgs.Empty);
+			
+			appMenu.Realized += delegate {
+				int x, y;
+				ParentWindow.GetOrigin (out x, out y);
+				x += Allocation.X;
+				y += Allocation.Bottom;
+				appMenu.GdkWindow.Move (x, y);
+			};
+			
+			appMenu.Show ();
 		}
 		
 		protected override void BindedWidget_ButtonPressEvent (object sender, ButtonPressEventArgs evnt)

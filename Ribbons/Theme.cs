@@ -14,6 +14,11 @@ namespace Ribbons
 		
 		protected ColorScheme colorScheme = new ColorScheme ();
 		
+		internal void DrawApplicationMenu (Context cr, Rectangle r, ApplicationMenu w)
+		{
+			
+		}
+		
 		/// <summary>Draws a group.</summary>
 		internal void DrawGroup (Context cr, Rectangle r, double roundSize, double lineWidth, double space, Pango.Layout l, Gtk.Widget expandButton, RibbonGroup w)
 		{
