@@ -1,5 +1,10 @@
 2008-06-24  Laurent Debacker <debackerl@gmail.com> 
 
+	* ApplicationMenu.cs: Implementation of SizeAllocated for app menu, and more
+	  work on SizeRequest
+
+2008-06-24  Laurent Debacker <debackerl@gmail.com> 
+
 	* ApplicationMenu.cs: Size requisition for app menu
 
 2008-06-24  Laurent Debacker <debackerl@gmail.com> 

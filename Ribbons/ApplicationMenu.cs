@@ -11,17 +11,30 @@ namespace Ribbons
 		
 		private List<MenuItem> items;
 		private Widget defaultMenu;
+		private int itemHeight;
 		
 		private Button optionsBtn, exitBtn;
 		private Widget activeMenu;
 		
 		private int menuItemsColWidth;
+		private int buttonsHeight;
+		private int exitBtnWidth, optionsBtnWidth;
+		private int visibleMenuItems;
 		
 		[GLib.Signal("options_clicked")]
 		public event EventHandler OptionClicked;
 		
 		[GLib.Signal("exit_clicked")]
 		public event EventHandler ExitClicked;
+		
+		public int ItemHeigth
+		{
+			get { return itemHeight; }
+			set
+			{
+				throw new NotImplementedException();
+			}
+		}
 		
 		public Widget DefaultMenu
 		{
@@ -74,8 +87,9 @@ namespace Ribbons
 		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
-			foreach(Widget w in items)
+			for(int i = 0, i_ub = visibleMenuItems ; i < i_ub ; ++i)
 			{
+				Widget w = items[i];
 				if(w.Visible) callback (w);
 			}
 		}
@@ -108,13 +122,14 @@ namespace Ribbons
 			}
 			
 			int buttonsWidth = 0;
-			int buttonsHeight = 0;
+			buttonsHeight = 0;
 			
 			if(optionsBtn != null)
 			{
 				Gtk.Requisition req = activeMenu.SizeRequest ();
 				buttonsWidth = req.Width;
 				buttonsHeight = req.Height;
+				optionsBtnWidth = req.Width;
 			}
 			
 			if(exitBtn != null)
@@ -123,6 +138,7 @@ namespace Ribbons
 				buttonsWidth = req.Width;
 				if(optionsBtn != null) buttonsWidth += space;
 				if(req.Height > buttonsHeight) buttonsHeight = req.Height;
+				exitBtnWidth = req.Width;
 			}
 			
 			buttonsHeight += space;
@@ -138,7 +154,83 @@ namespace Ribbons
 		{
 			base.OnSizeAllocated (allocation);
 			
+			visibleMenuItems = 0;
 			
+			allocation.Height -= borderWidth;
+			
+			if(buttonsHeight + borderWidth <= allocation.Height)
+			{
+				Gdk.Rectangle alloc;
+				
+				if(buttonsHeight > 0)
+				{
+					alloc.X = allocation.Right - borderWidth;
+					alloc.Y = allocation.Bottom - borderWidth - buttonsHeight;
+					alloc.Height = buttonsHeight;
+					
+					if(exitBtn != null)
+					{
+						alloc.X -= exitBtnWidth;
+						alloc.Width = exitBtnWidth;
+						if(alloc.X >= allocation.X + borderWidth)
+						{
+							exitBtn.SizeAllocate (alloc);
+						}
+					}
+					
+					if(optionsBtn != null)
+					{
+						if(exitBtn != null) alloc.X -= space;
+						alloc.X -= optionsBtnWidth;
+						alloc.Width = optionsBtnWidth;
+						if(alloc.X >= allocation.X + borderWidth)
+						{
+							exitBtn.SizeAllocate (alloc);
+						}
+					}
+					
+					allocation.Height -= buttonsHeight + space;
+				}
+				
+				alloc.X = allocation.X + borderWidth;
+				alloc.Y = allocation.Y + borderWidth;
+				alloc.Height = itemHeight;
+				if(allocation.Right - alloc.X - borderWidth < menuItemsColWidth)
+				{
+					menuItemsColWidth = allocation.Right - alloc.X - borderWidth;
+				}
+
+				if(menuItemsColWidth > 0)
+				{
+					alloc.Width = menuItemsColWidth;
+					
+					foreach(MenuItem mi in items)
+					{
+						if(mi.Visible)
+						{
+							if(alloc.Bottom <= allocation.Bottom)
+							{
+								mi.SizeAllocate (alloc);
+								alloc.Y += itemHeight;
+								++visibleMenuItems;
+							}
+						}
+					}
+				}
+				
+				if(activeMenu != null)
+				{
+					alloc.X = allocation.X + borderWidth + menuItemsColWidth + space;
+					alloc.Width = allocation.Right - alloc.X - borderWidth;
+					alloc.Y = allocation.Y + borderWidth;
+					alloc.Height = allocation.Bottom - alloc.Y - borderWidth;
+					
+					if(alloc.Width > 0 && alloc.Width > 0)
+					{
+						activeMenu.SizeAllocate (alloc);
+					}
+				}
+			}
 		}
 		
 		
