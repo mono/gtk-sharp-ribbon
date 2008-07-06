@@ -1,5 +1,9 @@
 2008-06-26  Laurent Debacker <debackerl@gmail.com> 
 
+	* ApplicationMenu.cs: Compilation bug fixes, sorry
+
+2008-06-26  Laurent Debacker <debackerl@gmail.com> 
+
 	* Theme.cs: Dummy renderer for App menu and app menu item
 	* ApplicationMenu.cs: More work on app menu item
 

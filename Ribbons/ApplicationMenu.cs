@@ -304,6 +304,8 @@ namespace Ribbons
 			private Label lbl;
 			private Widget menu;
 			
+			protected Theme theme = new Theme ();
+			
 			[GLib.Signal("action")]
 			public event EventHandler Action;
 			
@@ -347,6 +349,14 @@ namespace Ribbons
 				}
 			}
 			
+			/// <summary>Default constructor.</summary>
+			public MenuItem ()
+			{
+				this.SetFlag (WidgetFlags.NoWindow);
+				
+				this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			}
+			
 			/// <summary>Constructor given a label to display.</summary>
 			/// <param name="Label">Label to display.</param>
 			public MenuItem (string Label) : this ()
@@ -376,7 +386,7 @@ namespace Ribbons
 			public static MenuItem FromStockIcon (string Name, bool Large)
 			{
 				Image img = new Image (Name, Large ? IconSize.LargeToolbar : IconSize.SmallToolbar);
-				return btn = new MenuItem (img);
+				return new MenuItem (img);
 			}
 			
 			/// <summary>Constructs a Button from a stock.</summary>
@@ -387,6 +397,12 @@ namespace Ribbons
 			{
 				Image img = new Image (Name, Large ? IconSize.LargeToolbar : IconSize.SmallToolbar);
 				return new MenuItem (img, Label);
+			}
+			
+			/// <summary>Fires the Action event.</summary>
+			public void Click ()
+			{
+				if(Action != null) Action (this, EventArgs.Empty);
 			}
 			
 			/// <summary>Updates the child widget containing the label and/or image.</summary>
@@ -418,6 +434,31 @@ namespace Ribbons
 				{
 					Child = img;
 				}
+			}
+			
+			/// <summary>Binds a widget to listen to all button events.</summary>
+			protected void BindWidget (Widget w)
+			{
+				w.ButtonPressEvent += BindedWidget_ButtonPressEvent;
+				w.ButtonReleaseEvent += BindedWidget_ButtonReleaseEvent;
+			}
+			
+			/// <summary>Unbinds a widget to no longer listen to button events.</summary>
+			protected void UnbindWidget (Widget w)
+			{
+				w.ButtonPressEvent -= BindedWidget_ButtonPressEvent;
+				w.ButtonReleaseEvent -= BindedWidget_ButtonReleaseEvent;
+			}
+			
+			protected void BindedWidget_ButtonPressEvent (object sender, ButtonPressEventArgs evnt)
+			{
+				ProcessEvent (evnt.Event);
+			}
+			
+			protected void BindedWidget_ButtonReleaseEvent (object sender, ButtonReleaseEventArgs evnt)
+			{
+				ProcessEvent (evnt.Event);
+				Click ();
 			}
 			
 			protected override void OnSizeRequested (ref Requisition requisition)
