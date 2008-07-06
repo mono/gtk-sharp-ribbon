@@ -16,7 +16,14 @@ namespace Ribbons
 		
 		internal void DrawApplicationMenu (Context cr, Rectangle r, ApplicationMenu w)
 		{
-			
+			cr.Color = new Color (1, 0, 0);
+			cr.Fill ();
+		}
+		
+		internal void DrawApplicationMenuItem (Context cr, Rectangle r, ApplicationMenu.MenuItem w)
+		{
+			cr.Color = new Color (0, 1, 0);
+			cr.Fill ();
 		}
 		
 		/// <summary>Draws a group.</summary>

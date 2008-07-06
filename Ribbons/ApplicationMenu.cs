@@ -120,6 +120,21 @@ namespace Ribbons
 				Widget w = items[i];
 				if(w.Visible) callback (w);
 			}
+			
+			if(optionsBtn != null && optionsBtnVisible)
+			{
+				callback (optionsBtn);
+			}
+			
+			if(exitBtn != null && exitBtnVisible)
+			{
+				callback (exitBtn);
+			}
+			
+			if(activeMenu != null && activeMenuVisible)
+			{
+				callback (activeMenu);
+			}
 		}
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
@@ -283,30 +298,42 @@ namespace Ribbons
 		}
 		
 		
-		public class MenuItem : Widget
+		public class MenuItem : Bin
 		{
-			private Image icon;
-			private string label;
+			private Widget img;
+			private Label lbl;
 			private Widget menu;
 			
 			[GLib.Signal("action")]
 			public event EventHandler Action;
 			
-			public Image Icon
+			/// <summary>Image to display.</summary>
+			public Widget Image
 			{
-				get { return icon; }
 				set
 				{
-					throw new NotImplementedException();
+					if(img == value) return;
+					if(img != null) UnbindWidget (img);
+					img = value;
+					if(img != null) BindWidget (img);
+					UpdateImageLabel ();
 				}
+				get { return img; }
 			}
-			
+		
+			/// <summary>Label to display.</summary>
 			public string Label
 			{
-				get { return label; }
 				set
 				{
-					throw new NotImplementedException();
+					if(lbl != null) UnbindWidget (lbl);
+					lbl = new Gtk.Label (value);
+					if(lbl != null) BindWidget (lbl);
+					UpdateImageLabel ();
+				}
+				get
+				{
+					return lbl == null ? null : lbl.Text;
 				}
 			}
 			
@@ -315,8 +342,112 @@ namespace Ribbons
 				get { return menu; }
 				set
 				{
-					throw new NotImplementedException();
+					menu = value;
+					QueueResize ();
 				}
+			}
+			
+			/// <summary>Constructor given a label to display.</summary>
+			/// <param name="Label">Label to display.</param>
+			public MenuItem (string Label) : this ()
+			{
+				this.Label = Label;
+			}
+			
+			/// <summary>Constructor given an image to display.</summary>
+			/// <param name="Image">Image to display</param>
+			public MenuItem (Image Image) : this ()
+			{
+				this.Image = Image;
+			}
+			
+			/// <summary>Constructor given a label and an image to display.</summary>
+			/// <param name="Image">Image to display.</param>
+			/// <param name="Label">Label to display.</param>
+			public MenuItem (Image Image, string Label) : this ()
+			{
+				this.Image = Image;
+				this.Label = Label;
+			}
+			
+			/// <summary>Constructs a Button from a stock.</summary>
+			/// <param name="Name">Name of the stock.</param>
+			/// <param name="Large"><b>true</b> if the image should be large, <b>false</b> otherwise.</param>
+			public static MenuItem FromStockIcon (string Name, bool Large)
+			{
+				Image img = new Image (Name, Large ? IconSize.LargeToolbar : IconSize.SmallToolbar);
+				return btn = new MenuItem (img);
+			}
+			
+			/// <summary>Constructs a Button from a stock.</summary>
+			/// <param name="Name">Name of the stock.</param>
+			/// <param name="Label">Label to display.</param>
+			/// <param name="Large"><b>true</b> if the image should be large, <b>false</b> otherwise.</param>
+			public static MenuItem FromStockIcon (string Name, string Label, bool Large)
+			{
+				Image img = new Image (Name, Large ? IconSize.LargeToolbar : IconSize.SmallToolbar);
+				return new MenuItem (img, Label);
+			}
+			
+			/// <summary>Updates the child widget containing the label and/or image.</summary>
+			protected void UpdateImageLabel ()
+			{
+				if(Child != null)
+				{
+					Container con = Child as Container;
+					if(con != null)
+					{
+						con.Remove (img);
+						con.Remove (lbl);
+					}
+					Remove (Child);
+				}
+				
+				if(lbl != null && img != null)
+				{
+					HBox box = new HBox (false, 0);
+					box.Add (img);
+					box.Add (lbl);
+					Child = box;
+				}
+				else if(lbl != null)
+				{
+					Child = lbl;
+				}
+				else if(img != null)
+				{
+					Child = img;
+				}
+			}
+			
+			protected override void OnSizeRequested (ref Requisition requisition)
+			{
+				base.OnSizeRequested (ref requisition);
+			}
+			
+			protected override void OnSizeAllocated (Gdk.Rectangle allocation)
+			{
+				base.OnSizeAllocated (allocation);
+			}
+			
+			protected override bool OnExposeEvent (Gdk.EventExpose evnt)
+			{
+				Context cr = Gdk.CairoHelper.Create (this.GdkWindow);
+				
+				cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+				cr.Clip ();
+				Draw (cr);
+				
+				((IDisposable)cr.Target).Dispose ();
+				((IDisposable)cr).Dispose ();
+				
+				return base.OnExposeEvent (evnt);
+			}
+			
+			protected void Draw (Context cr)
+			{
+				Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
+				theme.DrawApplicationMenuItem (cr, rect, this);
 			}
 		}
 	}
