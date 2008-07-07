@@ -1,3 +1,9 @@
+2008-06-27  Laurent Debacker <debackerl@gmail.com> 
+
+	* Theme.cs: Initial theme code for app menu item borowed from button
+	* ApplicationMenuItem.cs: Size alloc, size request, drawing
+	* ApplicationMenu.cs: Bug fix in size alloc
+
 2008-06-26  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenu.cs: Autohide the app menu when required

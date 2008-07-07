@@ -20,10 +20,122 @@ namespace Ribbons
 			cr.Paint ();
 		}
 		
-		internal void DrawApplicationMenuItem (Context cr, Rectangle r, ApplicationMenuItem w)
+		internal void DrawApplicationMenuItem (Context cr, Rectangle bodyAllocation, ButtonState state, double roundSize, double lineWidth, double arrowSize, double arrowPadding, bool drawSeparator, ApplicationMenuItem widget)
 		{
-			cr.Color = new Color (0, 1, 0);
-			cr.Paint ();
+			double lineWidth05 = lineWidth / 2;
+			double lineWidth15 = lineWidth05 * 3;
+			
+			cr.LineWidth = lineWidth;
+			
+			if(state == ButtonState.Pressed || state == ButtonState.Hover)
+			{
+				LinearGradient bodyPattern, innerBorderPattern;
+				Color borderColor;
+				
+				if(state == ButtonState.Pressed)
+				{
+					bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
+					bodyPattern.AddColorStopRgb (0.0, new Color (0.996, 0.847, 0.667));
+					bodyPattern.AddColorStopRgb (0.37, new Color (0.984, 0.710, 0.396));
+					bodyPattern.AddColorStopRgb (0.43, new Color (0.980, 0.616, 0.204));
+					bodyPattern.AddColorStopRgb (1.0, new Color (0.992, 0.933, 0.667));
+					
+					innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
+					innerBorderPattern.AddColorStop (0.0, new Color (0.876, 0.718, 0.533, 1));
+					innerBorderPattern.AddColorStop (1.0, new Color (0.876, 0.718, 0.533, 0));
+					
+					borderColor = new Color (0.671, 0.631, 0.549);
+				}
+				else
+				{
+					bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
+					bodyPattern.AddColorStopRgb (0.0, new Color (1, 0.996, 0.890));
+					bodyPattern.AddColorStopRgb (0.37, new Color (1, 0.906, 0.592));
+					bodyPattern.AddColorStopRgb (0.43, new Color (1, 0.843, 0.314));
+					bodyPattern.AddColorStopRgb (1.0, new Color (1, 0.906, 0.588));
+					
+					innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
+					innerBorderPattern.AddColorStop (0.0, new Color (1, 1, 0.969, 1));
+					innerBorderPattern.AddColorStop (1.0, new Color (1, 1, 0.969, 0));
+					
+					borderColor = new Color (0.824, 0.753, 0.553);
+				}
+				
+				double x0 = bodyAllocation.X + lineWidth05, y0 = bodyAllocation.Y + lineWidth05;
+				double x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth05, y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth05;
+				
+				cr.MoveTo (x0 + roundSize, y0);
+				cr.Arc (x1 - roundSize, y0 + roundSize, roundSize, 1.5*Math.PI, 0);
+				cr.Arc (x1 - roundSize, y1 - roundSize, roundSize, 0, 0.5*Math.PI);
+				cr.Arc (x0 + roundSize, y1 - roundSize, roundSize, 0.5*Math.PI, Math.PI);
+				cr.Arc (x0 + roundSize, y0 + roundSize, roundSize, Math.PI, 1.5*Math.PI);
+				
+				cr.Pattern = bodyPattern;
+				cr.Fill ();
+				bodyPattern.Destroy ();
+				
+				x0 = bodyAllocation.X + lineWidth15; y0 = bodyAllocation.Y + lineWidth15;
+				x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth15; y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth15;
+				
+				double roundSizeMinusLineWidth = roundSize - lineWidth;
+				
+				x0 -= lineWidth;
+				
+				cr.MoveTo (x0 + roundSizeMinusLineWidth, y0);
+				cr.Arc (x1 - roundSizeMinusLineWidth, y0 + roundSizeMinusLineWidth, roundSizeMinusLineWidth, 1.5*Math.PI, 0);
+				cr.Arc (x1 - roundSizeMinusLineWidth, y1 - roundSizeMinusLineWidth, roundSizeMinusLineWidth, 0, 0.5*Math.PI);
+				cr.Arc (x0 + roundSizeMinusLineWidth, y1 - roundSizeMinusLineWidth, roundSizeMinusLineWidth, 0.5*Math.PI, Math.PI);
+				cr.Arc (x0 + roundSizeMinusLineWidth, y0 + roundSizeMinusLineWidth, roundSizeMinusLineWidth, Math.PI, 1.5*Math.PI);
+				
+				x0 += lineWidth;
+				
+				cr.Pattern = innerBorderPattern;
+				cr.Stroke ();
+				innerBorderPattern.Destroy ();
+				
+				x0 = bodyAllocation.X + lineWidth05; y0 = bodyAllocation.Y + lineWidth05;
+				x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth05; y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth05;
+				
+				cr.MoveTo (x0 + roundSize, y0);
+				cr.Arc (x1 - roundSize, y0 + roundSize, roundSize, 1.5*Math.PI, 0);
+				cr.Arc (x1 - roundSize, y1 - roundSize, roundSize, 0, 0.5*Math.PI);
+				cr.Arc (x0 + roundSize, y1 - roundSize, roundSize, 0.5*Math.PI, Math.PI);
+
+				cr.Color = borderColor;
+				cr.Stroke ();
+			}
+			
+			if(arrowSize > 0)
+			{
+				double x, y;
+				
+				x = bodyAllocation.X + bodyAllocation.Width - 2 * lineWidth - arrowSize - 2 * arrowPadding;
+				y = bodyAllocation.Y + (bodyAllocation.Height - arrowSize) / 2.0;
+				
+				if(drawSeparator)
+				{
+					double top = bodyAllocation.Y + 2 * lineWidth, bottom = bodyAllocation.Y + bodyAllocation.Height - 2 * lineWidth;
+					cr.MoveTo (x - lineWidth / 2, top);
+					cr.LineTo (x - lineWidth / 2, bottom);
+					cr.Color = new Color (0, 0, 0, 0.1);
+					cr.Stroke ();
+					
+					cr.MoveTo (x + lineWidth / 2, top);
+					cr.LineTo (x + lineWidth / 2, bottom);
+					cr.Color = new Color (1, 1, 1, 0.6);
+					cr.Stroke ();
+				}
+				
+				x += arrowPadding;
+				
+				y += arrowSize / 4.0 + lineWidth / 2.0;
+				cr.MoveTo (x, y);
+				cr.LineTo (x + arrowSize, y);
+				cr.LineTo (x + arrowSize / 2.0, y + arrowSize / 2.0);
+				cr.LineTo (x, y);
+				cr.Color = new Color (0, 0, 0);
+				cr.Fill ();
+			}
 		}
 		
 		/// <summary>Draws a group.</summary>

@@ -6,6 +6,16 @@ namespace Ribbons
 {
 	public class ApplicationMenuItem : Bin
 	{
+		private const double lineWidth = 1.0;
+		private const double arrowPadding = 2.0;
+		private const double arrowSize = 5.0;
+		private const double roundSize = 3.0;
+		
+		private Theme.ButtonState state = Theme.ButtonState.Default;
+		private int padding = 2;
+		private Gdk.Rectangle arrowAllocation;
+		private double effectiveArrowSize;
+		
 		private Widget img;
 		private Label lbl;
 		private Widget menu;
@@ -111,6 +121,15 @@ namespace Ribbons
 			if(Action != null) Action (this, EventArgs.Empty);
 		}
 		
+		private void ActivateMenu ()
+		{
+			ApplicationMenu.Window win = Parent as ApplicationMenu.Window;
+			if(win != null)
+			{
+				win.ActivateMenu (menu);
+			}
+		}
+		
 		/// <summary>Updates the child widget containing the label and/or image.</summary>
 		protected void UpdateImageLabel ()
 		{
@@ -171,16 +190,102 @@ namespace Ribbons
 		{
 			base.OnSizeRequested (ref requisition);
 			
+			Requisition childRequisition = new Requisition ();
 			if(Child != null)
 			{
-				requisition = Child.SizeRequest ();
+				childRequisition = Child.SizeRequest ();
+			}
+			
+			if(Menu != null)
+			{
+				int arrowSpace = (int)(arrowSize + 2 * (lineWidth + arrowPadding));
+				childRequisition.Width += arrowSpace;
+			}
+			
+			if(HeightRequest == -1)
+			{
+				requisition.Height = childRequisition.Height + (int)(lineWidth * 4 + padding * 2);
+			}
+			if(WidthRequest == -1)
+			{
+				requisition.Width = childRequisition.Width + (int)(lineWidth * 4 + padding * 2);
 			}
 		}
 		
-		/*protected override void OnSizeAllocated (Gdk.Rectangle allocation)
+		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{
 			base.OnSizeAllocated (allocation);
-		}*/
+			
+			effectiveArrowSize = arrowSize;
+			
+			if(Menu != null)
+			{
+				if(Action != null)
+					arrowAllocation.Width = (int)(arrowSize + 2 * arrowPadding);
+				else
+					arrowAllocation.Width = (int)(allocation.Width - 4 * lineWidth);
+				
+				arrowAllocation.Height = (int)(allocation.Height - 4 * lineWidth);
+				
+				arrowAllocation.X = (int)(allocation.Right - arrowAllocation.Width - 2 * lineWidth);
+				arrowAllocation.Y = (int)(allocation.Bottom - arrowAllocation.Height - 2 * lineWidth);
+			}
+			else
+			{
+				effectiveArrowSize = 0;
+			}
+			
+			allocation.X += (int)(lineWidth * 2 + padding);
+			allocation.Y += (int)(lineWidth * 2 + padding);
+			allocation.Height -= (int)(lineWidth * 4 + padding * 2);
+			allocation.Width -= (int)(lineWidth * 4 + padding * 2);
+			
+			if(Menu != null)
+			{
+				int arrowSpace = (int)(effectiveArrowSize + 2 * (lineWidth + arrowPadding));
+				allocation.Width -= arrowSpace;
+			}
+			
+			if(allocation.Height < 0) allocation.Height = 0;
+			if(allocation.Width < 0) allocation.Width = 0;
+			
+			if(Child != null)
+			{
+				Child.SizeAllocate (allocation);
+			}
+		}
+		
+		protected override bool OnEnterNotifyEvent (Gdk.EventCrossing evnt)
+		{
+			bool ret = base.OnEnterNotifyEvent (evnt);
+			state = Theme.ButtonState.Hover;
+			/*if(!enable)*/ state = Theme.ButtonState.Default;
+			this.QueueDraw ();
+			return ret;
+		}
+		
+		protected override bool OnLeaveNotifyEvent (Gdk.EventCrossing evnt)
+		{
+			bool ret = base.OnLeaveNotifyEvent (evnt);
+			state = Theme.ButtonState.Default;
+			this.QueueDraw ();
+			return ret;
+		}
+		
+		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
+		{
+			bool ret = base.OnButtonPressEvent (evnt);
+			state = Theme.ButtonState.Pressed;
+			/*if(!enable)*/ state = Theme.ButtonState.Default;
+			this.QueueDraw ();
+			
+			if(Menu != null && arrowAllocation.Contains ((int)evnt.X, (int)evnt.Y))
+			{
+				ActivateMenu ();
+			}
+			
+			return ret;
+		}
 		
 		protected override bool OnExposeEvent (Gdk.EventExpose evnt)
 		{
@@ -197,9 +302,10 @@ namespace Ribbons
 		}
 		
 		protected void Draw (Context cr)
-		{
+		{Console.WriteLine ("XXX");
 			Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
-			theme.DrawApplicationMenuItem (cr, rect, this);
+			bool drawSeparator = Action != null && Menu != null;
+			theme.DrawApplicationMenuItem (cr, rect, state, roundSize, lineWidth, effectiveArrowSize, arrowPadding, drawSeparator, this);
 		}
 	}
 }

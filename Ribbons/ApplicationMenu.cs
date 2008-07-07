@@ -145,7 +145,7 @@ namespace Ribbons
 			win.Destroy ();
 		}
 		
-		private class Window : SyntheticWindow
+		internal class Window : SyntheticWindow
 		{
 			private static int borderWidth = 2;
 			private static int space = 2;
@@ -168,6 +168,16 @@ namespace Ribbons
 					mi.Parent = this;
 					mi.Show ();
 				}
+			}
+			
+			public void ActivateMenu (Widget w)
+			{
+				if(w == null)
+					parent.activeMenu = parent.defaultMenu;
+				else
+					parent.activeMenu = w;
+				
+				QueueResize ();
 			}
 			
 			protected override void ForAll (bool include_internals, Callback callback)
@@ -249,7 +259,7 @@ namespace Ribbons
 					exitBtnWidth = req.Width;
 				}
 				
-				buttonsHeight += space;
+				if(buttonsHeight > 0) buttonsHeight += space;
 				if(buttonsWidth > requisition.Width) requisition.Width = buttonsWidth;
 				
 				requisition.Width += borderWidth << 1;
@@ -320,7 +330,7 @@ namespace Ribbons
 						foreach(ApplicationMenuItem mi in items)
 						{
 							if(mi.Visible)
-							{
+							{Console.WriteLine ("$" + alloc.Bottom + " " + allocation.Bottom);
 								if(alloc.Bottom <= allocation.Bottom)
 								{
 									mi.SizeAllocate (alloc);
@@ -344,6 +354,8 @@ namespace Ribbons
 						}
 					}
 				}
+				
+				Console.WriteLine ("Visible items: " + visibleMenuItems);
 			}
 			
 			protected override bool OnExposeEvent (Gdk.EventExpose evnt)
