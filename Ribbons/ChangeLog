@@ -1,5 +1,9 @@
 2008-06-26  Laurent Debacker <debackerl@gmail.com> 
 
+	* ApplicationMenu.cs: Autohide the app menu when required
+
+2008-06-26  Laurent Debacker <debackerl@gmail.com> 
+
 	* Theme.cs: Updated for new app menu API
 	* ApplicationMenuItem.cs, ApplicationMenu.cs: Major refactoring
 	* ApplicationButton.cs: Update for new App menu API

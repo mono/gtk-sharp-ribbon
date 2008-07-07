@@ -9,12 +9,14 @@ namespace Ribbons
 	{
 		protected Theme theme = new Theme ();
 		
-		protected List<ApplicationMenuItem> items;
+		private List<ApplicationMenuItem> items;
 		private Widget defaultMenu;
 		private int itemHeight;
 		
 		private Button optionsBtn, exitBtn;
 		private Widget activeMenu;
+		
+		private Window win;
 		
 		public Button OptionsButton
 		{
@@ -93,9 +95,54 @@ namespace Ribbons
 		
 		public void ShowAt (int x, int y)
 		{
-			Window win = new Window (this);
-			win.GdkWindow.Move (x, y);
+			if(win != null) KillMenu (true);
+			
+			win = new Window (this);
+			
+			win.Hidden += delegate { KillMenu (true); };
+			
 			win.Show ();
+			win.GdkWindow.Move (x, y);
+			
+			win.ButtonPressEvent += delegate { KillMenu (true); };
+			win.AddEvents ((int)Gdk.EventMask.ButtonPressMask);
+			
+			Grab.Add (win);
+			Gdk.GrabStatus grabbed = Gdk.Pointer.Grab (win.GdkWindow, true, Gdk.EventMask.ButtonPressMask, null, null, 0);
+			if(grabbed != Gdk.GrabStatus.Success)
+			{
+				KillMenu (false);
+				return;
+			}
+			
+			grabbed = Gdk.Keyboard.Grab (win.GdkWindow, true, 0);
+			if(grabbed != Gdk.GrabStatus.Success)
+			{
+				KillMenu (false);
+				return;
+			}
+		}
+		
+		private void KillMenu (bool Ungrab)
+		{
+			if(this.win == null) return;
+			
+			Window win = this.win;
+			this.win = null;
+			
+			foreach(ApplicationMenuItem item in items)
+			{
+				item.Unparent ();
+			}
+			
+			Grab.Remove (win);
+			if(Ungrab)
+			{
+				Gdk.Pointer.Ungrab (0);
+				Gdk.Keyboard.Ungrab (0);
+			}
+			win.Hide ();
+			win.Destroy ();
 		}
 		
 		private class Window : SyntheticWindow
@@ -119,6 +166,7 @@ namespace Ribbons
 				foreach(ApplicationMenuItem mi in parent.items)
 				{
 					mi.Parent = this;
+					mi.Show ();
 				}
 			}
 			
