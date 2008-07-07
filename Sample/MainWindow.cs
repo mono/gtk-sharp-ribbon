@@ -154,6 +154,10 @@ namespace Sample
 				Console.WriteLine("label1 leave");
 			};
 			
+			ApplicationMenu appMenu = ribbon.ApplicationButton.Menu;
+			ApplicationMenuItem mi = new ApplicationMenuItem ("Test 1");
+			appMenu.Append (mi);
+			
 			TextView txt = new TextView ();
 			
 			master.PackStart (ribbon, false, false, 0);
