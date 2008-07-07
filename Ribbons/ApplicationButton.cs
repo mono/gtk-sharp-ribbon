@@ -38,15 +38,12 @@ namespace Ribbons
 		{
 			if(enable && Clicked != null) Clicked (this, EventArgs.Empty);
 			
-			appMenu.Realized += delegate {
-				int x, y;
-				ParentWindow.GetOrigin (out x, out y);
-				x += Allocation.X;
-				y += Allocation.Bottom;
-				appMenu.GdkWindow.Move (x, y);
-			};
+			int x, y;
+			ParentWindow.GetOrigin (out x, out y);
+			x += Allocation.X;
+			y += Allocation.Bottom;
 			
-			appMenu.Show ();
+			appMenu.ShowAt (x, y);
 		}
 		
 		protected override void BindedWidget_ButtonPressEvent (object sender, ButtonPressEventArgs evnt)

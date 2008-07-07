@@ -1,5 +1,5 @@
-using Cairo;
 using System;
+using Cairo;
 
 namespace Ribbons
 {
@@ -14,16 +14,16 @@ namespace Ribbons
 		
 		protected ColorScheme colorScheme = new ColorScheme ();
 		
-		internal void DrawApplicationMenu (Context cr, Rectangle r, ApplicationMenu w)
+		internal void DrawApplicationMenu (Context cr, Rectangle r, ApplicationMenu m, Gtk.Widget w)
 		{
 			cr.Color = new Color (1, 0, 0);
-			cr.Fill ();
+			cr.Paint ();
 		}
 		
-		internal void DrawApplicationMenuItem (Context cr, Rectangle r, ApplicationMenu.MenuItem w)
+		internal void DrawApplicationMenuItem (Context cr, Rectangle r, ApplicationMenuItem w)
 		{
 			cr.Color = new Color (0, 1, 0);
-			cr.Fill ();
+			cr.Paint ();
 		}
 		
 		/// <summary>Draws a group.</summary>
