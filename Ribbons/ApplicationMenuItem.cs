@@ -123,7 +123,7 @@ namespace Ribbons
 		
 		private void ActivateMenu ()
 		{
-			ApplicationMenu.Window win = Parent as ApplicationMenu.Window;
+			ApplicationMenu win = Parent as ApplicationMenu;
 			if(win != null)
 			{
 				win.ActivateMenu (menu);

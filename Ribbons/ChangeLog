@@ -1,5 +1,12 @@
 2008-06-27  Laurent Debacker <debackerl@gmail.com> 
 
+	* QuickAccessToolbar.cs, FlowLayoutContainer.cs: Bugfix in remove
+	* Theme.cs, ApplicationMenuItem.cs: API update
+	* ApplicationMenu.cs: Lot of work to solve the rendering bug. It is now
+	  gone, but I cannot open the menu more than once...
+
+2008-06-27  Laurent Debacker <debackerl@gmail.com> 
+
 	* Theme.cs: Initial theme code for app menu item borowed from button
 	* ApplicationMenuItem.cs: Size alloc, size request, drawing
 	* ApplicationMenu.cs: Bug fix in size alloc

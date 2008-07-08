@@ -14,7 +14,7 @@ namespace Ribbons
 		
 		protected ColorScheme colorScheme = new ColorScheme ();
 		
-		internal void DrawApplicationMenu (Context cr, Rectangle r, ApplicationMenu m, Gtk.Widget w)
+		internal void DrawApplicationMenu (Context cr, Rectangle r, ApplicationMenu w)
 		{
 			cr.Color = new Color (1, 0, 0);
 			cr.Paint ();

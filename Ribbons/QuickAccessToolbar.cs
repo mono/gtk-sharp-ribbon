@@ -53,12 +53,10 @@ namespace Ribbons
 		/// <param name="WidgetIndex">Index of the widget to remove.</param>
 		public void Remove (int WidgetIndex)
 		{
-			widgets[WidgetIndex].Parent = null;
+			if(WidgetIndex == -1) WidgetIndex = widgets.Count - 1;
 			
-			if(WidgetIndex == -1)
-				widgets.RemoveAt (widgets.Count - 1);
-			else
-				widgets.RemoveAt (WidgetIndex);
+			widgets[WidgetIndex].Parent = null;
+			widgets.RemoveAt (WidgetIndex);
 			
 			ShowAll ();
 		}
