@@ -131,18 +131,28 @@ namespace Ribbons
 		
 		public void ShowAt (int x, int y)
 		{
-			if(win != null) KillMenu (true);
+			//if(win != null) KillMenu (true);
 			
-			win = new SyntheticWindow (WindowType.Popup);
-			win.Child = this;
+			//foreach(ApplicationMenuItem item in items) item.Parent = this;
 			
-			win.Hidden += delegate { KillMenu (true); };
-			
-			win.ShowAll ();
-			win.GdkWindow.Move (x, y);
-			
-			win.ButtonPressEvent += delegate { KillMenu (true); };
-			win.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			if(win == null)
+			{
+				win = new SyntheticWindow (WindowType.Popup);
+				win.Child = this;
+				
+				win.Hidden += delegate { KillMenu (true); };
+				
+				win.ShowAll ();
+				win.GdkWindow.Move (x, y);
+				
+				win.ButtonPressEvent += delegate { KillMenu (true); };
+				win.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			}
+			else
+			{
+				win.ShowAll ();
+				win.GdkWindow.Move (x, y);
+			}
 			
 			Grab.Add (win);
 			Gdk.GrabStatus grabbed = Gdk.Pointer.Grab (win.GdkWindow, true, Gdk.EventMask.ButtonPressMask, null, null, 0);
@@ -164,11 +174,10 @@ namespace Ribbons
 		{
 			if(this.win == null) return;
 			
-			Window win = this.win;
-			this.win = null;
+			//Window win = this.win;
+			//this.win = null;
 			
-			this.Child = null;
-			this.Unparent ();
+			//win.Child = null;
 			
 			Grab.Remove (win);
 			if(Ungrab)
@@ -177,7 +186,7 @@ namespace Ribbons
 				Gdk.Keyboard.Ungrab (0);
 			}
 			win.Hide ();
-			win.Destroy ();
+			//win.Destroy ();
 		}
 		
 		protected override void ForAll (bool include_internals, Callback callback)

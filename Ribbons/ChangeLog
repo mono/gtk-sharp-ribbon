@@ -1,5 +1,9 @@
 2008-06-27  Laurent Debacker <debackerl@gmail.com> 
 
+	* ApplicationMenu.cs: Bugfix, can now open app menu multiple times
+
+2008-06-27  Laurent Debacker <debackerl@gmail.com> 
+
 	* QuickAccessToolbar.cs, FlowLayoutContainer.cs: Bugfix in remove
 	* Theme.cs, ApplicationMenuItem.cs: API update
 	* ApplicationMenu.cs: Lot of work to solve the rendering bug. It is now
