@@ -8,7 +8,7 @@ namespace Ribbons
 	{
 		private const double lineWidth = 1.0;
 		private const double arrowPadding = 2.0;
-		private const double arrowSize = 5.0;
+		private const double arrowSize = 10.0;
 		private const double roundSize = 3.0;
 		
 		private Theme.ButtonState state = Theme.ButtonState.Default;
@@ -259,7 +259,7 @@ namespace Ribbons
 		{
 			bool ret = base.OnEnterNotifyEvent (evnt);
 			state = Theme.ButtonState.Hover;
-			/*if(!enable)*/ state = Theme.ButtonState.Default;
+			//if(!enable) state = Theme.ButtonState.Default;
 			this.QueueDraw ();
 			return ret;
 		}
@@ -276,7 +276,7 @@ namespace Ribbons
 		{
 			bool ret = base.OnButtonPressEvent (evnt);
 			state = Theme.ButtonState.Pressed;
-			/*if(!enable)*/ state = Theme.ButtonState.Default;
+			//if(!enable) state = Theme.ButtonState.Default;
 			this.QueueDraw ();
 			
 			if(Menu != null && arrowAllocation.Contains ((int)evnt.X, (int)evnt.Y))
@@ -302,7 +302,7 @@ namespace Ribbons
 		}
 		
 		protected void Draw (Context cr)
-		{Console.WriteLine ("XXX");
+		{
 			Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
 			bool drawSeparator = Action != null && Menu != null;
 			theme.DrawApplicationMenuItem (cr, rect, state, roundSize, lineWidth, effectiveArrowSize, arrowPadding, drawSeparator, this);

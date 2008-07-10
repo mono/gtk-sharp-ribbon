@@ -126,11 +126,10 @@ namespace Ribbons
 					cr.Stroke ();
 				}
 				
-				x += arrowPadding;
+				x += arrowSize / 4.0 + lineWidth / 2.0;
 				
-				y += arrowSize / 4.0 + lineWidth / 2.0;
 				cr.MoveTo (x, y);
-				cr.LineTo (x + arrowSize, y);
+				cr.LineTo (x, y + arrowSize);
 				cr.LineTo (x + arrowSize / 2.0, y + arrowSize / 2.0);
 				cr.LineTo (x, y);
 				cr.Color = new Color (0, 0, 0);

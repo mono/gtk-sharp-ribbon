@@ -330,7 +330,7 @@ namespace Ribbons
 					foreach(ApplicationMenuItem mi in items)
 					{
 						if(mi.Visible)
-						{Console.WriteLine ("$" + alloc.X + " " + alloc.Y + " " + alloc.Width + " " + alloc.Height);
+						{
 							if(alloc.Bottom <= allocation.Bottom)
 							{
 								mi.SizeAllocate (alloc);

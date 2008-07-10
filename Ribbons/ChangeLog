@@ -1,3 +1,9 @@
+2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+
+	* Theme.cs: Fix them code for app menu item
+	* ApplicationMenuItem.cs: Bug fixes
+	* ApplicationMenu.cs: Remove debug code
+
 2008-06-27  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenu.cs: Bugfix, can now open app menu multiple times
