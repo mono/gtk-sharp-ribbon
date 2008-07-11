@@ -78,9 +78,11 @@ namespace Ribbons
 			get { return defaultMenu; }
 			set
 			{
-				Widget prevDefaultMenu = defaultMenu;
 				if(defaultMenu == value) return;
+				bool updateActive = defaultMenu == activeMenu;
+				if(updateActive && defaultMenu != null) defaultMenu.Unparent ();
 				defaultMenu = value;
+				if(updateActive) SetActiveMenu (value);
 			}
 		}
 		
@@ -135,12 +137,19 @@ namespace Ribbons
 		}
 		
 		public void ActivateMenu (Widget w)
-		{
+		{Console.WriteLine ((w == null) + " " + (defaultMenu == null)); 
 			if(w == null)
-				activeMenu = defaultMenu;
+				SetActiveMenu (defaultMenu);
 			else
-				activeMenu = w;
-			
+				SetActiveMenu (w);
+		}
+		
+		private void SetActiveMenu (Widget w)
+		{
+			if(activeMenu != null) activeMenu.Unparent ();
+			activeMenu = w;
+			w.Parent = this;
+			w.Visible = true;
 			QueueResize ();
 		}
 		
