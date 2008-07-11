@@ -1,5 +1,11 @@
 2008-06-28  Laurent Debacker <debackerl@gmail.com> 
 
+	* Theme.cs: Better behavior of hilighs for app menu item
+	* ApplicationMenuItem.cs: More work on proper app menu item behavior
+	  (hilights)
+
+2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+
 	* Theme.cs: Fix them code for app menu item
 	* ApplicationMenuItem.cs: Bug fixes
 	* ApplicationMenu.cs: Remove debug code

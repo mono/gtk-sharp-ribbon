@@ -11,7 +11,8 @@ namespace Ribbons
 		private const double arrowSize = 10.0;
 		private const double roundSize = 3.0;
 		
-		private Theme.ButtonState state = Theme.ButtonState.Default;
+		private Theme.MenuItemState state = Theme.MenuItemState.Default;
+		private bool menuOpened = false;
 		private int padding = 2;
 		private Gdk.Rectangle arrowAllocation;
 		private double effectiveArrowSize;
@@ -255,19 +256,37 @@ namespace Ribbons
 			}
 		}
 		
-		protected override bool OnEnterNotifyEvent (Gdk.EventCrossing evnt)
+		protected override bool OnMotionNotifyEvent (Gdk.EventMotion evnt)
 		{
-			bool ret = base.OnEnterNotifyEvent (evnt);
-			state = Theme.ButtonState.Hover;
-			//if(!enable) state = Theme.ButtonState.Default;
+			bool ret = base.OnMotionNotifyEvent (evnt);
+			
+			if(Menu != null && Action != null && arrowAllocation.Contains ((int)evnt.X, (int)evnt.Y))
+			{
+				state = Theme.MenuItemState.HilightMenu;
+			}
+			else if(menuOpened || Action == null)
+			{
+				state = Theme.MenuItemState.Hilight;
+			}
+			else
+			{
+				state = Theme.MenuItemState.HilightAction;
+			}
+			
 			this.QueueDraw ();
 			return ret;
+		}
+		
+		protected override bool OnEnterNotifyEvent (Gdk.EventCrossing evnt)
+		{
+			menuOpened = false;
+			return base.OnEnterNotifyEvent (evnt);
 		}
 		
 		protected override bool OnLeaveNotifyEvent (Gdk.EventCrossing evnt)
 		{
 			bool ret = base.OnLeaveNotifyEvent (evnt);
-			state = Theme.ButtonState.Default;
+			state = Theme.MenuItemState.Default;
 			this.QueueDraw ();
 			return ret;
 		}
@@ -275,9 +294,6 @@ namespace Ribbons
 		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
 		{
 			bool ret = base.OnButtonPressEvent (evnt);
-			state = Theme.ButtonState.Pressed;
-			//if(!enable) state = Theme.ButtonState.Default;
-			this.QueueDraw ();
 			
 			if(Menu != null && arrowAllocation.Contains ((int)evnt.X, (int)evnt.Y))
 			{
