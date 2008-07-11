@@ -156,7 +156,17 @@ namespace Sample
 			
 			ApplicationMenu appMenu = ribbon.ApplicationButton.Menu;
 			ApplicationMenuItem mi = new ApplicationMenuItem ("Test 1");
+			mi.Menu = new Gtk.TreeView ();
 			appMenu.Append (mi);
+			mi = new ApplicationMenuItem ("Test 2");
+			mi.Menu = new Gtk.TreeView ();
+			appMenu.Append (mi);
+			mi = new ApplicationMenuItem ("Test 3");
+			mi.Menu = new Gtk.TreeView ();
+			appMenu.Append (mi);
+			
+			appMenu.OptionsButton = new Ribbons.Button ("Options");
+			appMenu.ExitButton = new Ribbons.Button ("Exit");
 			
 			TextView txt = new TextView ();
 			

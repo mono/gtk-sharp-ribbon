@@ -1,3 +1,8 @@
+2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+
+	* MainWindow.cs: Update sample to showcase advance in app menu
+	  implementation
+
 2008-06-27  Laurent Debacker <debackerl@gmail.com> 
 
 	* MainWindow.cs: Update sample
