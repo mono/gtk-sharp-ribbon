@@ -25,7 +25,7 @@ namespace Ribbons
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
-			appMenu = new ApplicationMenu ();
+			appMenu = new ApplicationMenu (this);
 			
 			HeightRequest = 36;
 			WidthRequest = 36;
@@ -73,8 +73,7 @@ namespace Ribbons
 		
 		protected void Draw (Context cr)
 		{
-			Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
-			theme.DrawApplicationButton (cr, rect, state, lineWidth, this);
+			theme.DrawApplicationButton (cr, Allocation, state, lineWidth, this);
 		}
 		
 		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)

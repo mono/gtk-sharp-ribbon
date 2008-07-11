@@ -11,7 +11,7 @@ namespace Ribbons
 		protected GroupStyle groupStyle;
 		protected Theme.ButtonState state = Theme.ButtonState.Default;
 		protected PositionType imgPos;
-		protected bool drawBg;
+		protected bool drawBg, opaqueBg;
 		protected Widget img;
 		protected Label lbl;
 		protected double padding;
@@ -47,6 +47,17 @@ namespace Ribbons
 				QueueDraw ();
 			}
 			get { return drawBg; }
+		}
+		
+		public bool OpaqueBackground
+		{
+			set
+			{
+				if(opaqueBg == value) return;
+				opaqueBg = value;
+				QueueDraw ();
+			}
+			get { return opaqueBg; }
 		}
 		
 		/// <summary><b>true</b> if the button is enabled, <b>false</B> otherwise.</summary>

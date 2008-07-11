@@ -23,8 +23,9 @@ namespace Ribbons
 		{
 			double lineWidth05 = lineWidth / 2;
 			double lineWidth15 = lineWidth * 1.5;
+			Gdk.Rectangle alloc = w.Allocation;
 			
-			cr.Color = new Color (0, 0, 0);
+			cr.Color = new Color (0.4, 0.4, 0.4);
 			cr.Paint ();
 			
 			cr.Rectangle (itemsAlloc.X, itemsAlloc.Y, itemsAlloc.Width, itemsAlloc.Height);
@@ -42,6 +43,31 @@ namespace Ribbons
 			cr.LineTo (itemsAlloc.Right - lineWidth15, itemsAlloc.Bottom);
 			cr.Color = new Color (0, 0, 0, 0.2);
 			cr.Stroke ();
+			
+			cr.Rectangle (alloc.X, alloc.Y, alloc.Width, itemsAlloc.Y - alloc.Y);
+			LinearGradient linGrad = new LinearGradient (0, alloc.Y, 0, itemsAlloc.Y - alloc.Y);
+			linGrad.AddColorStop (0.0, new Color (0.4, 0.4, 0.4));
+			linGrad.AddColorStop (0.3, new Color (0.2, 0.2, 0.2));
+			linGrad.AddColorStop (0.3, new Color (0, 0, 0));
+			linGrad.AddColorStop (1.0, new Color (0.4, 0.4, 0.4));
+			cr.Pattern = linGrad;
+			cr.Fill ();
+			linGrad.Destroy ();
+			
+			cr.Rectangle (alloc.X, itemsAlloc.Bottom, alloc.Width, alloc.Bottom - itemsAlloc.Bottom);
+			linGrad = new LinearGradient (0, itemsAlloc.Bottom, 0, alloc.Bottom);
+			linGrad.AddColorStop (0.0, new Color (0.4, 0.4, 0.4));
+			linGrad.AddColorStop (0.3, new Color (0.2, 0.2, 0.2));
+			linGrad.AddColorStop (0.3, new Color (0, 0, 0));
+			linGrad.AddColorStop (1.0, new Color (0.4, 0.4, 0.4));
+			cr.Pattern = linGrad;
+			cr.Fill ();
+			linGrad.Destroy ();
+			
+			Gdk.Rectangle appBtnAlloc = w.ApplicationButton.Allocation;
+			appBtnAlloc.X = alloc.X;
+			appBtnAlloc.Y = itemsAlloc.Y - 2 - appBtnAlloc.Height;
+			DrawApplicationButton (cr, appBtnAlloc, ButtonState.Pressed, 1.0, w.ApplicationButton);
 		}
 		
 		internal void DrawApplicationMenuItem (Context cr, Rectangle bodyAllocation, MenuItemState state, double roundSize, double lineWidth, double arrowSize, double arrowPadding, bool drawSeparator, ApplicationMenuItem widget)
@@ -573,7 +599,7 @@ namespace Ribbons
 		}
 		
 		/// <summary>Draws an application button.</summary>
-		public void DrawApplicationButton (Context cr, Rectangle bodyAllocation, ButtonState state, double lineWidth, BaseButton widget)
+		public void DrawApplicationButton (Context cr, Gdk.Rectangle bodyAllocation, ButtonState state, double lineWidth, BaseButton widget)
 		{
 			const double dropShadowOffset = 1;
 			double radius = (bodyAllocation.Height - dropShadowOffset) / 2;
@@ -766,10 +792,21 @@ namespace Ribbons
 			else if(widget.DrawBackground)
 			{
 				LinearGradient bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
-				bodyPattern.AddColorStop (0.0, new Color (1, 1, 1, 0.7));
-				bodyPattern.AddColorStop (0.37, new Color (1, 1, 1, 0.2));
-				bodyPattern.AddColorStop (0.43, new Color (1, 1, 1, 0.2));
-				bodyPattern.AddColorStop (1.0, new Color (1, 1, 1, 0.7));
+				if(widget.OpaqueBackground)
+				{
+					bodyPattern.AddColorStop (0.0, new Color (0.9, 0.9, 0.9));
+					bodyPattern.AddColorStop (0.37, new Color (0.6, 0.6, 0.6));
+					bodyPattern.AddColorStop (0.43, new Color (0.6, 0.6, 0.6));
+					bodyPattern.AddColorStop (1.0, new Color (0.9, 0.9, 0.9));
+
+				}
+				else
+				{
+					bodyPattern.AddColorStop (0.0, new Color (1, 1, 1, 0.7));
+					bodyPattern.AddColorStop (0.37, new Color (1, 1, 1, 0.2));
+					bodyPattern.AddColorStop (0.43, new Color (1, 1, 1, 0.2));
+					bodyPattern.AddColorStop (1.0, new Color (1, 1, 1, 0.7));
+				}
 				
 				double x0 = bodyAllocation.X + lineWidth05, y0 = bodyAllocation.Y + lineWidth05;
 				double x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth05, y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth05;
@@ -796,7 +833,7 @@ namespace Ribbons
 					if(upLeft) cr.Arc (x0 + roundSize, y0 + roundSize, roundSize, Math.PI, 1.5*Math.PI);
 					else cr.LineTo (x0, y0);
 					
-					cr.Color = new Color (1, 1, 1, 0.8);
+					cr.Color = new Color (1, 1, 1, 0.5);
 					cr.Stroke ();
 				}
 				

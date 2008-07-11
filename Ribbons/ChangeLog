@@ -1,5 +1,13 @@
 2008-06-28  Laurent Debacker <debackerl@gmail.com> 
 
+	* Theme.cs: More compliant app menu background, and new feature for buttons:
+	  opaque background.
+	* ApplicationMenu.cs: Opaque buttons, window offset.
+	* ApplicationButton.cs: API update
+	* BaseButton.cs: New feature: opaque background
+
+2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+
 	* Theme.cs: Nicer menu items background
 	* ApplicationMenuItem.cs: Attempt to fix justification of menu item labels,
 	  not ok yet

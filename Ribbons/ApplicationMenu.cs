@@ -7,12 +7,15 @@ namespace Ribbons
 {
 	public class ApplicationMenu : Container
 	{
+		private const int verticalWindowOffset = 20;
 		private const double lineWidth = 1.0;
+		private const int topPadding = 24;
 		private const int borderWidth = 6;
 		private const int space = 2;
 		
 		protected Theme theme = new Theme ();
 		
+		private ApplicationButton appBtn;
 		private List<ApplicationMenuItem> items;
 		private Widget defaultMenu;
 		private int itemHeight;
@@ -31,6 +34,11 @@ namespace Ribbons
 		
 		private Window win;
 		
+		public ApplicationButton ApplicationButton
+		{
+			get { return appBtn; }
+		}
+		
 		public Button OptionsButton
 		{
 			get { return optionsBtn; }
@@ -42,6 +50,7 @@ namespace Ribbons
 				if(value != null)
 				{
 					value.DrawBackground = true;
+					value.OpaqueBackground = true;
 					value.Parent = this;
 					value.Visible = true;
 				}
@@ -59,6 +68,7 @@ namespace Ribbons
 				if(value != null)
 				{
 					value.DrawBackground = true;
+					value.OpaqueBackground = true;
 					value.Parent = this;
 					value.Visible = true;
 				}
@@ -107,7 +117,7 @@ namespace Ribbons
 		}
 		
 		/// <summary>Default constructor.</summary>
-		public ApplicationMenu ()
+		internal ApplicationMenu (ApplicationButton Button)
 		{
 			this.SetFlag (WidgetFlags.NoWindow);
 			
@@ -117,6 +127,7 @@ namespace Ribbons
 			
 			//Append (new Button ("OK"));
 			
+			appBtn = Button;
 			items = new List<ApplicationMenuItem> ();
 			itemHeight = 32;
 			menuSize = new Gdk.Size (240, 320);
@@ -182,7 +193,7 @@ namespace Ribbons
 				win.Hidden += delegate { KillMenu (true); };
 				
 				win.ShowAll ();
-				win.GdkWindow.Move (x, y);
+				win.GdkWindow.Move (x, y - verticalWindowOffset);
 				
 				win.ButtonPressEvent += delegate { KillMenu (true); };
 				win.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
@@ -190,7 +201,7 @@ namespace Ribbons
 			else
 			{
 				win.ShowAll ();
-				win.GdkWindow.Move (x, y);
+				win.GdkWindow.Move (x, y - verticalWindowOffset);
 			}
 			
 			Grab.Add (win);
@@ -306,7 +317,7 @@ namespace Ribbons
 			
 			if(buttonsHeight > 0) requisition.Height += buttonsHeight + space;
 			requisition.Width += borderWidth << 1;
-			requisition.Height += borderWidth << 1;
+			requisition.Height += borderWidth + topPadding;
 			
 			this.menuItemsColWidth = menuItemsColWidth;
 		}
@@ -320,7 +331,7 @@ namespace Ribbons
 			
 			allocation.Height -= borderWidth;
 			
-			if(buttonsHeight + borderWidth <= allocation.Height)
+			if(buttonsHeight + topPadding <= allocation.Height)
 			{
 				Gdk.Rectangle alloc;
 				
@@ -355,7 +366,7 @@ namespace Ribbons
 				}
 				
 				alloc.X = allocation.X + borderWidth;
-				alloc.Y = allocation.Y + borderWidth;
+				alloc.Y = allocation.Y + topPadding;
 				itemsAlloc.X = alloc.X;
 				itemsAlloc.Y = alloc.Y;
 				alloc.Height = itemHeight;
@@ -389,7 +400,7 @@ namespace Ribbons
 				{
 					alloc.X = allocation.X + borderWidth + menuItemsColWidth + space;
 					alloc.Width = allocation.Right - alloc.X - borderWidth;
-					alloc.Y = allocation.Y + borderWidth;
+					alloc.Y = allocation.Y + topPadding;
 					alloc.Height = allocation.Bottom - alloc.Y - borderWidth;
 					
 					if(alloc.Width > 0 && alloc.Width > 0)
