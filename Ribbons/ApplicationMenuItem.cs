@@ -259,8 +259,21 @@ namespace Ribbons
 		protected override bool OnMotionNotifyEvent (Gdk.EventMotion evnt)
 		{
 			bool ret = base.OnMotionNotifyEvent (evnt);
-			
-			if(Menu != null && Action != null && arrowAllocation.Contains ((int)evnt.X, (int)evnt.Y))
+			UpdateState ((int)evnt.X, (int)evnt.Y);
+			return ret;
+		}
+		
+		protected override bool OnEnterNotifyEvent (Gdk.EventCrossing evnt)
+		{
+			bool ret = base.OnEnterNotifyEvent (evnt);
+			menuOpened = false;
+			UpdateState ((int)evnt.X, (int)evnt.Y);
+			return ret;
+		}
+		
+		private void UpdateState (int x, int y)
+		{
+			if(Menu != null && Action != null && arrowAllocation.Contains (x, y))
 			{
 				state = Theme.MenuItemState.HilightMenu;
 			}
@@ -271,16 +284,9 @@ namespace Ribbons
 			else
 			{
 				state = Theme.MenuItemState.HilightAction;
+
 			}
-			
 			this.QueueDraw ();
-			return ret;
-		}
-		
-		protected override bool OnEnterNotifyEvent (Gdk.EventCrossing evnt)
-		{
-			menuOpened = false;
-			return base.OnEnterNotifyEvent (evnt);
 		}
 		
 		protected override bool OnLeaveNotifyEvent (Gdk.EventCrossing evnt)

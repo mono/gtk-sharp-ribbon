@@ -7,7 +7,7 @@ namespace Ribbons
 {
 	public class ApplicationMenu : Container
 	{
-		private static int borderWidth = 2;
+		private static int borderWidth = 6;
 		private static int space = 2;
 		
 		protected Theme theme = new Theme ();
@@ -19,6 +19,7 @@ namespace Ribbons
 		private Button optionsBtn, exitBtn;
 		private Widget activeMenu;
 		
+		private Gdk.Rectangle itemsAlloc;
 		private int menuItemsColWidth;
 		private int buttonsHeight;
 		private int exitBtnWidth, optionsBtnWidth;
@@ -34,7 +35,14 @@ namespace Ribbons
 			set
 			{
 				if(optionsBtn == value) return;
+				if(optionsBtn != null) optionsBtn.Unparent ();
 				optionsBtn = value;
+				if(value != null)
+				{
+					value.DrawBackground = true;
+					value.Parent = this;
+					value.Visible = true;
+				}
 			}
 		}
 		
@@ -44,7 +52,14 @@ namespace Ribbons
 			set
 			{
 				if(exitBtn == value) return;
+				if(exitBtn != null) exitBtn.Unparent ();
 				exitBtn = value;
+				if(value != null)
+				{
+					value.DrawBackground = true;
+					value.Parent = this;
+					value.Visible = true;
+				}
 			}
 		}
 		
@@ -196,17 +211,17 @@ namespace Ribbons
 				if(w.Visible) callback (w);
 			}
 			
-			if(optionsBtn != null && optionsBtnVisible)
+			if(optionsBtn != null && optionsBtn.Visible)
 			{
 				callback (optionsBtn);
 			}
 			
-			if(exitBtn != null && exitBtnVisible)
+			if(exitBtn != null && exitBtn.Visible)
 			{
 				callback (exitBtn);
 			}
 			
-			if(activeMenu != null && activeMenuVisible)
+			if(activeMenu != null && activeMenu.Visible)
 			{
 				callback (activeMenu);
 			}
@@ -229,8 +244,6 @@ namespace Ribbons
 					menuItemsColHeight += itemHeight;
 				}
 			}
-			
-			Console.WriteLine ("> " + menuItemsColHeight +" " + menuItemsColWidth);
 			
 			requisition.Height = menuItemsColHeight;
 			requisition.Width = menuItemsColWidth;
@@ -256,19 +269,17 @@ namespace Ribbons
 			if(exitBtn != null)
 			{
 				Gtk.Requisition req = exitBtn.SizeRequest ();
-				buttonsWidth = req.Width;
+				buttonsWidth += req.Width;
 				if(optionsBtn != null) buttonsWidth += space;
 				if(req.Height > buttonsHeight) buttonsHeight = req.Height;
 				exitBtnWidth = req.Width;
 			}
 			
-			if(buttonsHeight > 0) buttonsHeight += space;
 			if(buttonsWidth > requisition.Width) requisition.Width = buttonsWidth;
 			
+			if(buttonsHeight > 0) requisition.Height += buttonsHeight + space;
 			requisition.Width += borderWidth << 1;
 			requisition.Height += borderWidth << 1;
-			
-			Console.WriteLine (requisition.Height + " " + requisition.Width);
 			
 			this.menuItemsColWidth = menuItemsColWidth;
 		}
@@ -278,6 +289,7 @@ namespace Ribbons
 			base.OnSizeAllocated (allocation);
 			
 			visibleMenuItems = 0;
+			exitBtnVisible = optionsBtnVisible = false;
 			
 			allocation.Height -= borderWidth;
 			
@@ -288,7 +300,7 @@ namespace Ribbons
 				if(buttonsHeight > 0)
 				{
 					alloc.X = allocation.Right - borderWidth;
-					alloc.Y = allocation.Bottom - borderWidth - buttonsHeight;
+					alloc.Y = allocation.Bottom - buttonsHeight;
 					alloc.Height = buttonsHeight;
 					
 					if(exitBtn != null)
@@ -308,15 +320,18 @@ namespace Ribbons
 						alloc.Width = optionsBtnWidth;
 						if(alloc.X >= allocation.X + borderWidth)
 						{
-							exitBtn.SizeAllocate (alloc);
+							optionsBtn.SizeAllocate (alloc);
 						}
 					}
 					
 					allocation.Height -= buttonsHeight + space;
+					Console.WriteLine (allocation.Height + " " + itemHeight);
 				}
 				
 				alloc.X = allocation.X + borderWidth;
 				alloc.Y = allocation.Y + borderWidth;
+				itemsAlloc.X = alloc.X;
+				itemsAlloc.Y = alloc.Y;
 				alloc.Height = itemHeight;
 				if(allocation.Right - alloc.X - borderWidth < menuItemsColWidth)
 				{
@@ -340,6 +355,9 @@ namespace Ribbons
 						}
 					}
 				}
+				
+				itemsAlloc.Width = menuItemsColWidth;
+				itemsAlloc.Height = alloc.Y - itemsAlloc.Y;
 				
 				if(activeMenu != null)
 				{
@@ -373,7 +391,7 @@ namespace Ribbons
 		protected void Draw (Context cr)
 		{
 			Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
-			theme.DrawApplicationMenu (cr, rect, this);
+			theme.DrawApplicationMenu (cr, rect, itemsAlloc, this);
 		}
 	}
 }

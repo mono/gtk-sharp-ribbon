@@ -1,5 +1,11 @@
 2008-06-28  Laurent Debacker <debackerl@gmail.com> 
 
+	* Theme.cs: First steps for the app menu theme
+	* ApplicationMenuItem.cs: Better handling of fast moving pointers
+	* ApplicationMenu.cs: Bugfixes
+
+2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+
 	* Theme.cs: Better behavior of hilighs for app menu item
 	* ApplicationMenuItem.cs: More work on proper app menu item behavior
 	  (hilights)

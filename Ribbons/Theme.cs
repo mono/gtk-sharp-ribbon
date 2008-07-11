@@ -19,10 +19,14 @@ namespace Ribbons
 		
 		protected ColorScheme colorScheme = new ColorScheme ();
 		
-		internal void DrawApplicationMenu (Context cr, Rectangle r, ApplicationMenu w)
+		internal void DrawApplicationMenu (Context cr, Rectangle r, Gdk.Rectangle itemsAlloc, ApplicationMenu w)
 		{
-			cr.Color = new Color (1, 0, 0);
+			cr.Color = new Color (0, 0, 0);
 			cr.Paint ();
+			
+			cr.Rectangle (itemsAlloc.X, itemsAlloc.Y, itemsAlloc.Width, itemsAlloc.Height);
+			cr.Color = new Color (0.9216, 0.9216, 0.9216);
+			cr.Fill ();
 		}
 		
 		internal void DrawApplicationMenuItem (Context cr, Rectangle bodyAllocation, MenuItemState state, double roundSize, double lineWidth, double arrowSize, double arrowPadding, bool drawSeparator, ApplicationMenuItem widget)
