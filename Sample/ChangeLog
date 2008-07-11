@@ -1,5 +1,9 @@
 2008-06-28  Laurent Debacker <debackerl@gmail.com> 
 
+	* MainWindow.cs: Updated sample to show menu opening in app menu
+
+2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+
 	* MainWindow.cs: Update sample to showcase advance in app menu
 	  implementation
 

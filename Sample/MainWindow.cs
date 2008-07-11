@@ -155,14 +155,17 @@ namespace Sample
 			};
 			
 			ApplicationMenu appMenu = ribbon.ApplicationButton.Menu;
+			TextView mnu = new TextView ();
+			appMenu.DefaultMenu = mnu;
+			mnu.Buffer.InsertAtCursor ("Default");
 			ApplicationMenuItem mi = new ApplicationMenuItem ("Test 1");
-			mi.Menu = new Gtk.TreeView ();
+			mnu = new TextView ();
+			mi.Menu = mnu;
+			mnu.Buffer.InsertAtCursor ("Test 1");
 			appMenu.Append (mi);
 			mi = new ApplicationMenuItem ("Test 2");
-			mi.Menu = new Gtk.TreeView ();
 			appMenu.Append (mi);
 			mi = new ApplicationMenuItem ("Test 3");
-			mi.Menu = new Gtk.TreeView ();
 			appMenu.Append (mi);
 			
 			appMenu.OptionsButton = new Ribbons.Button ("Options");
