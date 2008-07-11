@@ -7,14 +7,16 @@ namespace Ribbons
 {
 	public class ApplicationMenu : Container
 	{
-		private static int borderWidth = 6;
-		private static int space = 2;
+		private const double lineWidth = 1.0;
+		private const int borderWidth = 6;
+		private const int space = 2;
 		
 		protected Theme theme = new Theme ();
 		
 		private List<ApplicationMenuItem> items;
 		private Widget defaultMenu;
 		private int itemHeight;
+		private Gdk.Size menuSize;
 		
 		private Button optionsBtn, exitBtn;
 		private Widget activeMenu;
@@ -70,6 +72,18 @@ namespace Ribbons
 			{
 				if(itemHeight == value) return;
 				itemHeight = value;
+				QueueResize ();
+			}
+		}
+		
+		public Gdk.Size MenuSize
+		{
+			get { return menuSize; }
+			set
+			{
+				if(menuSize == value) return;
+				menuSize = value;
+				QueueResize ();
 			}
 		}
 		
@@ -105,6 +119,7 @@ namespace Ribbons
 			
 			items = new List<ApplicationMenuItem> ();
 			itemHeight = 32;
+			menuSize = new Gdk.Size (240, 320);
 		}
 		
 		public void Prepend (ApplicationMenuItem i)
@@ -137,7 +152,7 @@ namespace Ribbons
 		}
 		
 		public void ActivateMenu (Widget w)
-		{Console.WriteLine ((w == null) + " " + (defaultMenu == null)); 
+		{ 
 			if(w == null)
 				SetActiveMenu (defaultMenu);
 			else
@@ -259,9 +274,12 @@ namespace Ribbons
 			
 			if(activeMenu != null)
 			{
-				Gtk.Requisition req = activeMenu.SizeRequest ();
+				/*Gtk.Requisition req = activeMenu.SizeRequest ();
 				requisition.Width += req.Width;
-				if(req.Height > requisition.Height) requisition.Height = req.Height;
+				if(req.Height > requisition.Height) requisition.Height = req.Height;*/
+				
+				requisition.Width += menuSize.Width;
+				if(menuSize.Height > requisition.Height) requisition.Height = menuSize.Height;
 			}
 			
 			int buttonsWidth = 0;
@@ -334,7 +352,6 @@ namespace Ribbons
 					}
 					
 					allocation.Height -= buttonsHeight + space;
-					Console.WriteLine (allocation.Height + " " + itemHeight);
 				}
 				
 				alloc.X = allocation.X + borderWidth;
@@ -365,8 +382,8 @@ namespace Ribbons
 					}
 				}
 				
-				itemsAlloc.Width = menuItemsColWidth;
-				itemsAlloc.Height = alloc.Y - itemsAlloc.Y;
+				itemsAlloc.Width = menuItemsColWidth + space;
+				itemsAlloc.Height = allocation.Bottom - itemsAlloc.Y - borderWidth;
 				
 				if(activeMenu != null)
 				{
@@ -400,7 +417,7 @@ namespace Ribbons
 		protected void Draw (Context cr)
 		{
 			Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
-			theme.DrawApplicationMenu (cr, rect, itemsAlloc, this);
+			theme.DrawApplicationMenu (cr, rect, itemsAlloc, lineWidth, this);
 		}
 	}
 }

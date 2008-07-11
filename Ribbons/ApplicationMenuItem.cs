@@ -47,6 +47,7 @@ namespace Ribbons
 			{
 				if(lbl != null) UnbindWidget (lbl);
 				lbl = new Gtk.Label (value);
+				lbl.Justify = Justification.Left;
 				if(lbl != null) BindWidget (lbl);
 				UpdateImageLabel ();
 			}

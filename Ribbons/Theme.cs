@@ -19,14 +19,29 @@ namespace Ribbons
 		
 		protected ColorScheme colorScheme = new ColorScheme ();
 		
-		internal void DrawApplicationMenu (Context cr, Rectangle r, Gdk.Rectangle itemsAlloc, ApplicationMenu w)
+		internal void DrawApplicationMenu (Context cr, Rectangle r, Gdk.Rectangle itemsAlloc, double lineWidth, ApplicationMenu w)
 		{
+			double lineWidth05 = lineWidth / 2;
+			double lineWidth15 = lineWidth * 1.5;
+			
 			cr.Color = new Color (0, 0, 0);
 			cr.Paint ();
 			
 			cr.Rectangle (itemsAlloc.X, itemsAlloc.Y, itemsAlloc.Width, itemsAlloc.Height);
 			cr.Color = new Color (0.9216, 0.9216, 0.9216);
 			cr.Fill ();
+			
+			cr.LineWidth = lineWidth;
+			
+			cr.MoveTo (itemsAlloc.Right - lineWidth05, itemsAlloc.Top);
+			cr.LineTo (itemsAlloc.Right - lineWidth05, itemsAlloc.Bottom);
+			cr.Color = new Color (1, 1, 1, 0.2);
+			cr.Stroke ();
+			
+			cr.MoveTo (itemsAlloc.Right - lineWidth15, itemsAlloc.Top);
+			cr.LineTo (itemsAlloc.Right - lineWidth15, itemsAlloc.Bottom);
+			cr.Color = new Color (0, 0, 0, 0.2);
+			cr.Stroke ();
 		}
 		
 		internal void DrawApplicationMenuItem (Context cr, Rectangle bodyAllocation, MenuItemState state, double roundSize, double lineWidth, double arrowSize, double arrowPadding, bool drawSeparator, ApplicationMenuItem widget)

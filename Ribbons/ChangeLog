@@ -1,5 +1,12 @@
 2008-06-28  Laurent Debacker <debackerl@gmail.com> 
 
+	* Theme.cs: Nicer menu items background
+	* ApplicationMenuItem.cs: Attempt to fix justification of menu item labels,
+	  not ok yet
+	* ApplicationMenu.cs: Fixed menu size
+
+2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+
 	* ApplicationMenu.cs: Working menu opening
 
 2008-06-28  Laurent Debacker <debackerl@gmail.com> 
