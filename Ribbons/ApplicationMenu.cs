@@ -7,7 +7,7 @@ namespace Ribbons
 {
 	public class ApplicationMenu : Container
 	{
-		private const int verticalWindowOffset = 20;
+		private const int verticalWindowOffset = topPadding - space;
 		private const double lineWidth = 1.0;
 		private const int topPadding = 24;
 		private const int borderWidth = 6;

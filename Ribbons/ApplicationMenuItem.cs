@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Gtk;
 using Cairo;
 
@@ -6,6 +7,7 @@ namespace Ribbons
 {
 	public class ApplicationMenuItem : Bin
 	{
+		private static readonly TimeSpan openTimeoutSec = new TimeSpan (0, 0, 0, 0, 300);
 		private const double lineWidth = 1.0;
 		private const double arrowPadding = 2.0;
 		private const double arrowSize = 10.0;
@@ -16,6 +18,8 @@ namespace Ribbons
 		private int padding = 2;
 		private Gdk.Rectangle arrowAllocation;
 		private double effectiveArrowSize;
+		
+		private Timer timer;
 		
 		private Widget img;
 		private Label lbl;
@@ -47,7 +51,7 @@ namespace Ribbons
 			{
 				if(lbl != null) UnbindWidget (lbl);
 				lbl = new Gtk.Label (value);
-				lbl.Justify = Justification.Left;
+				lbl.Xalign = 0;
 				if(lbl != null) BindWidget (lbl);
 				UpdateImageLabel ();
 			}
@@ -73,6 +77,8 @@ namespace Ribbons
 			this.SetFlag (WidgetFlags.NoWindow);
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			
+			this.timer = new Timer (OpenMenuNow); 
 		}
 		
 		/// <summary>Constructor given a label to display.</summary>
@@ -117,19 +123,30 @@ namespace Ribbons
 			return new ApplicationMenuItem (img, Label);
 		}
 		
+		public override void Dispose ()
+		{
+			base.Dispose ();
+			timer.Dispose ();
+		}
+		
 		/// <summary>Fires the Action event.</summary>
 		public void Click ()
 		{
 			if(Action != null) Action (this, EventArgs.Empty);
 		}
 		
-		private void ActivateMenu ()
+		private void OpenMenuNow (object State)
 		{
 			ApplicationMenu win = Parent as ApplicationMenu;
 			if(win != null)
 			{
 				win.ActivateMenu (menu);
 			}
+		}
+		
+		private void ActivateMenu ()
+		{
+			timer.Change (openTimeoutSec, new TimeSpan (-1));
 		}
 		
 		/// <summary>Updates the child widget containing the label and/or image.</summary>
