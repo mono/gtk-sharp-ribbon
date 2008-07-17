@@ -1,3 +1,9 @@
+2008-06-30  Laurent Debacker <debackerl@gmail.com> 
+
+	* ApplicationMenu.cs: hide container when windows is hidden
+	* ApplicationButton.cs: keep the app menu pressed while the app menu is
+	  opened
+
 2008-06-29  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenuItem.cs: Text align fix, and delayed menu opening.

@@ -9,6 +9,7 @@ namespace Ribbons
 		protected const double lineWidth = 1.0;
 		
 		private ApplicationMenu appMenu;
+		private bool menuOpened;
 		
 		/// <summary>Fired when the button is clicked.</summary>
 		[GLib.Signal("clicked")]
@@ -25,7 +26,10 @@ namespace Ribbons
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
+			menuOpened = false;
+			
 			appMenu = new ApplicationMenu (this);
+			appMenu.Hidden += appMenu_Hidden;
 			
 			HeightRequest = 36;
 			WidthRequest = 36;
@@ -44,6 +48,14 @@ namespace Ribbons
 			y += Allocation.Bottom;
 			
 			appMenu.ShowAt (x, y);
+			menuOpened = true;
+			QueueDraw ();
+		}
+		
+		private void appMenu_Hidden (object sender, EventArgs args)
+		{
+			menuOpened = false;
+			QueueDraw ();
 		}
 		
 		protected override void BindedWidget_ButtonPressEvent (object sender, ButtonPressEventArgs evnt)
@@ -73,6 +85,8 @@ namespace Ribbons
 		
 		protected void Draw (Context cr)
 		{
+			Theme.ButtonState state = this.state;
+			if(menuOpened) state = Theme.ButtonState.Pressed;
 			theme.DrawApplicationButton (cr, Allocation, state, lineWidth, this);
 		}
 		

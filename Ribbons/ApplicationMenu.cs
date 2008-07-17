@@ -236,6 +236,7 @@ namespace Ribbons
 				Gdk.Keyboard.Ungrab (0);
 			}
 			win.Hide ();
+			this.Hide ();
 			//win.Destroy ();
 		}
 		
