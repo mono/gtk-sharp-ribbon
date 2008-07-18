@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Gtk;
 using Cairo;
 
@@ -7,6 +8,8 @@ namespace Ribbons
 {
 	public class ApplicationMenu : Container
 	{
+		private static readonly TimeSpan openTimeoutSec = new TimeSpan (0, 0, 0, 0, 300);
+		
 		private const int verticalWindowOffset = topPadding - space;
 		private const double lineWidth = 1.0;
 		private const int topPadding = 24;
@@ -164,10 +167,8 @@ namespace Ribbons
 		
 		public void ActivateMenu (Widget w)
 		{ 
-			if(w == null)
-				SetActiveMenu (defaultMenu);
-			else
-				SetActiveMenu (w);
+			if(w == null) w = defaultMenu;
+			SetActiveMenu (w);
 		}
 		
 		private void SetActiveMenu (Widget w)
@@ -410,6 +411,12 @@ namespace Ribbons
 					}
 				}
 			}
+		}
+		
+		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
+		{
+			SetActiveMenu (defaultMenu);
+			return base.OnButtonPressEvent (evnt);
 		}
 		
 		protected override bool OnExposeEvent (Gdk.EventExpose evnt)

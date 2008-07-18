@@ -1,3 +1,8 @@
+2008-07-01  Laurent Debacker <debackerl@gmail.com> 
+
+	* ApplicationMenuItem.cs: Open/close menu on mouse hover, with timer
+	* ApplicationMenu.cs: Reset default menu on button click
+
 2008-06-30  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenu.cs: hide container when windows is hidden

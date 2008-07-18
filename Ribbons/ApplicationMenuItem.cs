@@ -138,15 +138,7 @@ namespace Ribbons
 		private void OpenMenuNow (object State)
 		{
 			ApplicationMenu win = Parent as ApplicationMenu;
-			if(win != null)
-			{
-				win.ActivateMenu (menu);
-			}
-		}
-		
-		private void ActivateMenu ()
-		{
-			timer.Change (openTimeoutSec, new TimeSpan (-1));
+			win.ActivateMenu (menu);
 		}
 		
 		/// <summary>Updates the child widget containing the label and/or image.</summary>
@@ -291,24 +283,37 @@ namespace Ribbons
 		
 		private void UpdateState (int x, int y)
 		{
+			Theme.MenuItemState newState;
+			
 			if(Menu != null && Action != null && arrowAllocation.Contains (x, y))
 			{
-				state = Theme.MenuItemState.HilightMenu;
+				newState = Theme.MenuItemState.HilightMenu;
 			}
 			else if(menuOpened || Action == null)
 			{
-				state = Theme.MenuItemState.Hilight;
+				newState = Theme.MenuItemState.Hilight;
 			}
 			else
 			{
-				state = Theme.MenuItemState.HilightAction;
-
+				newState = Theme.MenuItemState.HilightAction;
 			}
-			this.QueueDraw ();
+			
+			if(state != newState)
+			{
+				if(newState == Theme.MenuItemState.Hilight || newState == Theme.MenuItemState.HilightMenu)
+					timer.Change (openTimeoutSec, new TimeSpan (-1));
+				else
+					timer.Change (-1, -1);
+				
+				state = newState;
+				this.QueueDraw ();
+			}
 		}
 		
 		protected override bool OnLeaveNotifyEvent (Gdk.EventCrossing evnt)
 		{
+			timer.Change (-1, -1);
+			
 			bool ret = base.OnLeaveNotifyEvent (evnt);
 			state = Theme.MenuItemState.Default;
 			this.QueueDraw ();
@@ -319,10 +324,10 @@ namespace Ribbons
 		{
 			bool ret = base.OnButtonPressEvent (evnt);
 			
-			if(Menu != null && arrowAllocation.Contains ((int)evnt.X, (int)evnt.Y))
+			/*if(Menu != null && arrowAllocation.Contains ((int)evnt.X, (int)evnt.Y))
 			{
 				ActivateMenu ();
-			}
+			}*/
 			
 			return ret;
 		}
