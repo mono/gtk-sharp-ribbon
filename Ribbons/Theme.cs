@@ -19,6 +19,53 @@ namespace Ribbons
 		
 		protected ColorScheme colorScheme = new ColorScheme ();
 		
+		internal void DrawKeyTip (Context cr, Point center, string label)
+		{
+			Pango.Layout layout = Pango.CairoHelper.CreateLayout (cr);
+			
+			layout.SetText ("O");
+			Pango.CairoHelper.UpdateLayout (cr, layout);
+			int minWidth, minHeight;
+			layout.GetPixelSize (out minWidth, out minHeight);
+			
+			layout.SetText (label);
+			Pango.CairoHelper.UpdateLayout (cr, layout);
+			int lblWidth, lblHeight;
+			layout.GetPixelSize (out lblWidth, out lblHeight);
+			
+			int width = Math.Max (minWidth, lblWidth);
+			int height = Math.Max (minHeight, lblHeight);
+			
+			double x0 = center.X - (width >> 1), x1 = x0 + width;
+			double y0 = center.Y - (height >> 1), y1 = y0 + height;
+			
+			cr.LineWidth = 1.0;
+			
+			cr.MoveTo (x0 + 1.5, y0 + 0.5);
+			cr.LineTo (x1 - 1.5, y0 + 0.5);
+			cr.LineTo (x1 - 0.5, y0 + 1.5);
+			cr.LineTo (x1 - 0.5, y1 - 1.5);
+			cr.LineTo (x1 - 1.5, y1 - 0.5);
+			cr.LineTo (x0 + 1.5, y1 - 0.5);
+			cr.LineTo (x0 + 0.5, y1 - 1.5);
+			cr.LineTo (x0 + 0.5, y0 + 1.5);
+			cr.LineTo (x0 + 0.5, y0 + 0.5);
+			
+			cr.Color = new Color (0, 0, 0);
+			cr.StrokePreserve ();
+			
+			LinearGradient grad = new LinearGradient (0, y0, 0, y1);
+			grad.AddColorStop (0, colorScheme.LightBright);
+			grad.AddColorStop (1, colorScheme.LightDark);
+			cr.Pattern = grad;
+			cr.Fill ();
+			grad.Destroy ();
+			
+			Pango.CairoHelper.UpdateLayout (cr, layout);
+			cr.MoveTo (center.X - lblWidth / 2, center.Y - lblHeight / 2);
+			Pango.CairoHelper.ShowLayout (cr, layout);
+		}
+		
 		internal void DrawApplicationMenu (Context cr, Rectangle r, Gdk.Rectangle itemsAlloc, double lineWidth, ApplicationMenu w)
 		{
 			double lineWidth05 = lineWidth / 2;

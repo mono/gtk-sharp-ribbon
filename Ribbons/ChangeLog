@@ -1,3 +1,9 @@
+2008-07-03  Laurent Debacker <debackerl@gmail.com> 
+
+	* Theme.cs: Enhanced key tip theme
+	* SyntheticWindow.cs: Debug code
+	* RibbonGroup.cs: Avoid memory leak
+
 2008-07-01  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenuItem.cs: Open/close menu on mouse hover, with timer

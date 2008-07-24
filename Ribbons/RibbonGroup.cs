@@ -99,6 +99,12 @@ namespace Ribbons
 			};
 		}
 		
+		public override void Dispose ()
+		{
+			base.Dispose ();
+			if(lbl_layout != null) lbl_layout.Dispose ();
+		}
+				
 		protected virtual void OnExpand (EventArgs e)
 		{
 			if(expandHandler != null) expandHandler (this, e);
