@@ -1,3 +1,10 @@
+2008-07-10  Laurent Debacker <debackerl@gmail.com> 
+
+	* GroupVariant.cs: Implementation of the concept of "variant" for Group.
+	* VariantsCombinaison.cs: Implementation for the concept of variant
+	  combinaisons.
+	* Ribbon.cs: Migrating Ribbon to variants combinaisons.
+
 2008-07-03  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Enhanced key tip theme
