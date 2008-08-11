@@ -111,10 +111,11 @@ namespace Ribbons
 				{
 					w.HeightRequest = rowHeight;
 					requisitions[i] = w.SizeRequest ();
-					totalWidth += requisitions[i].Width;
+					totalWidth += requisitions[i].Width + spacing;
 				}
 				++i;
 			}
+			totalWidth -= spacing;
 			
 			if(WidthRequest != -1 && HeightRequest != -1)
 			{

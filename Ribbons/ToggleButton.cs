@@ -8,8 +8,11 @@ namespace Ribbons
 	public class ToggleButton : BaseButton
 	{
 		private bool value;
+		private bool displayArrow;
 		
 		protected const double lineWidth = 1.0;
+		protected const double arrowPadding = 2.0;
+		protected const double arrowSize = 8.0;
 		
 		public event EventHandler ValueChanged;
 		
@@ -21,9 +24,24 @@ namespace Ribbons
 				{
 					this.value = value;
 					OnValueChanged ();
+					QueueDraw ();
 				}
 			}
 			get { return value; }
+		}
+		
+		public bool DisplayArrow
+		{
+			set
+			{
+				if(this.displayArrow != value)
+				{
+					this.displayArrow = value;
+					OnValueChanged ();
+					QueueDraw ();
+				}
+			}
+			get { return displayArrow; }
 		}
 		
 		/// <summary>Default constructor.</summary>
@@ -95,7 +113,6 @@ namespace Ribbons
 		{
 			ProcessEvent (evnt.Event);
 			Value = !Value;
-			QueueDraw ();
 		}
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
@@ -106,6 +123,20 @@ namespace Ribbons
 			if(Child != null && Child.Visible)
 			{
 				childRequisition = Child.SizeRequest ();
+			}
+			
+			if(displayArrow)
+			{
+				int arrowSpace = (int)(arrowSize + 2 * (lineWidth + arrowPadding));
+				
+				if(imgPos == PositionType.Top || imgPos == PositionType.Bottom)
+				{
+					childRequisition.Height += arrowSpace;
+				}
+				else
+				{
+					childRequisition.Width += arrowSpace;
+				}
 			}
 			
 			if(HeightRequest == -1)
@@ -126,6 +157,20 @@ namespace Ribbons
 			allocation.Y += (int)(lineWidth * 2 + padding);
 			allocation.Height -= (int)(lineWidth * 4 + padding * 2);
 			allocation.Width -= (int)(lineWidth * 4 + padding * 2);
+			
+			if(displayArrow)
+			{
+				int arrowSpace = (int)(arrowSize + 2 * (lineWidth + arrowPadding));
+				
+				if(imgPos == PositionType.Top || imgPos == PositionType.Bottom)
+				{
+					allocation.Height -= arrowSpace;
+				}
+				else
+				{
+					allocation.Width -= arrowSpace;
+				}
+			}
 			
 			if(allocation.Height < 0) allocation.Height = 0;
 			if(allocation.Width < 0) allocation.Width = 0;
@@ -156,7 +201,7 @@ namespace Ribbons
 			double roundSize = isSmall ? 2.0 : 3.0;
 			Theme.ButtonState s = this.state;
 			if(this.value) s = Theme.ButtonState.Pressed;
-			theme.DrawButton (cr, rect, s, roundSize, lineWidth, 0, 0, false, this);
+			theme.DrawButton (cr, rect, s, roundSize, lineWidth, displayArrow ? arrowSize : 0, arrowPadding, false, this);
 		}
 		
 		protected virtual void OnValueChanged ()

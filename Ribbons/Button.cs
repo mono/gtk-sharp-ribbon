@@ -95,7 +95,7 @@ namespace Ribbons
 		}
 		
 		/// <summary>Fires the Click event.</summary>
-		public void Click ()
+		public virtual void Click ()
 		{
 			if(enable && Clicked != null) Clicked (this, EventArgs.Empty);
 		}

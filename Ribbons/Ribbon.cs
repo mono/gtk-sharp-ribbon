@@ -84,13 +84,13 @@ namespace Ribbons
 				if(curPageIndex != -1)
 				{
 					CurrentPage.Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (false));
-					CurrentPage.SelectedCombinaison.Unparent ();
+					CurrentPage.Page.Unparent ();
 				}
 				curPageIndex = value;
 				if(curPageIndex != -1)
 				{
 					CurrentPage.Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (true));
-					CurrentPage.SelectedCombinaison.Parent = this;
+					CurrentPage.Page.Parent = this;
 				}
 				
 				ShowAll ();
@@ -161,24 +161,26 @@ namespace Ribbons
 		/// <summary>Adds a new page after all existing pages.</summary>
 		/// <param name="Child">The widget to use as the content of the page.</param>
 		/// <param name="Label">The widget to use as the tab.</param>
-		public RibbonPage AppendPage (Widget Label)
+		public void AppendPage (Widget Child, Widget Label)
 		{
-			return InsertPage (Label, -1);
+			InsertPage (Child, Label, -1);
 		}
 		
 		/// <summary>Adds a new page before all existing pages.</summary>
+		/// <param name="Child">The widget to use as the content of the page.</param>
 		/// <param name="Label">The widget to use as the tab.</param>
-		public RibbonPage PrependPage (Widget Child, Widget Label)
+		public void PrependPage (Widget Child, Widget Label)
 		{
-			return InsertPage (Label, 0);
+			InsertPage (Child, Label, 0);
 		}
 		
 		/// <summary>Adds a new page at the specified position.</summary>
+		/// <param name="Child">The widget to use as the content of the page.</param>
 		/// <param name="Label">The widget to use as the tab.</param>
 		/// <param name="Position">The index (starting at 0) at which the page must be inserted, or -1 to insert the page after all existing pages.</param>
-		public RibbonPage InsertPage (Widget Label, int Position)
+		public void InsertPage (Widget Child, Widget Label, int Position)
 		{
-			RibbonPage p = new RibbonPage (this, Label);
+			RibbonPage p = new RibbonPage (this, Child, Label);
 			
 			if(Position == -1)
 			{
@@ -224,8 +226,6 @@ namespace Ribbons
 			{
 				OnPageSelected (new PageEventArgs (pages[idx]));
 			}
-			
-			return p;
 		}
 		
 		/// <summary>Removes the specified page.</summary>
@@ -256,15 +256,15 @@ namespace Ribbons
 		/// <summary>Returns the index of the specified page given its content widget.</summary>
 		/// <param name="Child">The content of the page whose index must be returned.</param>
 		/// <returns>The index.</returns>
-		/*public int PageNum (VariantsCombinaison Child)
+		public int PageNum (Widget Child)
 		{
 			// Since it is unlikely that the widget will containe more than
 			// a dozen pages, it is just fine to do a linear search.
 			for(int i = 0, i_up = pages.Count ; i < i_up ; ++i)
-				if(pages[i].SelectedCombinaison == Child)
+				if(pages[i].Page == Child)
 					return i;
 			return -1;
-		}*/
+		}
 		
 		/// <summary>Returns the index of the specified page.</summary>
 		/// <param name="Page">The page whose index must be returned.</param>
@@ -282,7 +282,7 @@ namespace Ribbons
 		/// <summary>Sets the label widget of the specified page.</summary>
 		/// <param name="Page">The content of the page whose label must be modified.</param>
 		/// <param name="Label">The new label widget.</param>
-		/*public void SetPageLabel (Widget Child, Widget Label)
+		public void SetPageLabel (Widget Child, Widget Label)
 		{
 			pages[PageNum (Child)].Label = Label;
 		}
@@ -301,7 +301,7 @@ namespace Ribbons
 		public Widget GetNthPage (int Position)
 		{
 			return pages[Position].Page;
-		}*/
+		}
 		
 		/// <summary>Returns the n-th page.</summary>
 		/// <param name="Position">Index of the page to return.</param>
@@ -352,9 +352,9 @@ namespace Ribbons
 			
 			foreach(RibbonPage p in pages) callback (p.Label);
 			
-			if(CurrentPage != null && CurrentPage.SelectedCombinaison != null)
+			if(CurrentPage != null)
 			{
-				callback (CurrentPage.SelectedCombinaison);
+				callback (CurrentPage.Page);
 			}
 		}
 		
@@ -407,9 +407,9 @@ namespace Ribbons
 			}
 			
 			double pageWidth = 0, pageHeight = 0;
-			if(page != null && page.SelectedCombinaison != null)
+			if(page != null)
 			{
-				pageRequisition = page.SelectedCombinaison.SizeRequest ();
+				pageRequisition = page.Page.SizeRequest ();
 				pageWidth = pageRequisition.Width + 2 * pagePadding;
 				pageHeight = pageRequisition.Height + 2 * pagePadding;
 			}
@@ -497,12 +497,12 @@ namespace Ribbons
 			bodyAllocation.Width = allocation.Width - bodyAllocation.X  - (int)borderWidth;
 			bodyAllocation.Height = allocation.Height - bodyAllocation.Y - (int)borderWidth;
 			
-			if(page != null && page.SelectedCombinaison != null)
+			if(page != null)
 			{
 				pageAllocation = bodyAllocation;
 				int pad = (int)pagePadding;
 				pageAllocation.Inflate (-pad, -pad);
-				page.SelectedCombinaison.SizeAllocate (pageAllocation);
+				page.Page.SizeAllocate (pageAllocation);
 			}
 			else
 			{
@@ -565,17 +565,9 @@ namespace Ribbons
 		public class RibbonPage
 		{
 			private Ribbon parent;
-			private Widget label;
+			private Widget label, page;
 			private Requisition labelReq;
 			private Gdk.Rectangle labelAlloc;
-			private List<VariantsCombinaison> combinaisons;
-			private int curRequiredWidth;
-			private VariantsCombinaison selectedCombinaison;
-			
-			public VariantsCombinaison SelectedCombinaison
-			{
-				get { return selectedCombinaison; }
-			}
 			
 			/// <summary>Label widget of the page.</summary>
 			public Widget Label
@@ -589,6 +581,13 @@ namespace Ribbons
 				get { return label; }
 			}
 			
+			/// <summary>Widget used as the content of the page.</summary>
+			public Widget Page
+			{
+				set { page = value; }
+				get { return page; }
+			}
+			
 			internal Requisition LabelRequisition
 			{
 				set { labelReq = value; }
@@ -600,64 +599,16 @@ namespace Ribbons
 				get { return labelAlloc; }
 			}
 			
-			public IList<VariantsCombinaison> Combinaisons
+			public RibbonPage (Ribbon Parent, Widget Page, Widget Label)
 			{
-				get { return combinaisons.AsReadOnly(); }
-			}
-			
-			public RibbonPage (Ribbon Parent, Widget Label)
-			{
-				this.parent = Parent;
+				parent = Parent;
 				this.Label = Label;
-				this.combinaisons = new List<VariantsCombinaison> ();
-				this.curRequiredWidth = -1;
+				this.Page = Page;
 			}
 			
 			public void SetLabelAllocation (Gdk.Rectangle r)
 			{
 				labelAlloc = r;
-			}
-			
-			public void AddVariantsCombinaison (VariantsCombinaison Combinaison)
-			{
-				combinaisons.Add (Combinaison);
-				this.curRequiredWidth = -1;
-			}
-			
-			public void RemoveVariantsCombinaison (VariantsCombinaison Combinaison)
-			{
-				combinaisons.Remove (Combinaison);
-			}
-			
-			public void SelectCombinaison (int MaxWidth, int Height)
-			{
-				if(curRequiredWidth == MaxWidth) return;
-				
-				KeyValuePair<int,VariantsCombinaison>[] pairs = new KeyValuePair<int,VariantsCombinaison>[combinaisons.Count];
-				
-				for(int i = 0, i_up = combinaisons.Count ; i < i_up ; ++i)
-				{
-					combinaisons[i].HeightRequest = Height;
-					int w = combinaisons[i].SizeRequest ().Width;
-					pairs[i] = new KeyValuePair<int,VariantsCombinaison> (w, combinaisons[i]);
-				}
-				
-				Array.Sort (pairs);
-				
-				int low = 0, high = pairs.Length;
-				while(low < high)
-				{
-					int mid = (low + high) >> 1;
-					if(pairs[mid].Key < MaxWidth)
-						low = mid + 1;
-					else
-						high = mid;
-				}
-				
-				if(high == 0)
-					selectedCombinaison = combinaisons[0];
-				else
-					selectedCombinaison = combinaisons[high - 1];
 			}
 		}
 	}

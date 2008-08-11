@@ -1,3 +1,15 @@
+2008-08-11  Laurent Debacker <debackerl@gmail.com> 
+
+	* Button.cs: Make Click method virtual
+	* ToggleButton.cs: Allow toggle buttons to display an arrow
+	* VariantsCombinaisonSwitcher.cs: Introduction of variants combinaisons
+	  switcher.
+	* ToolBox.cs: Bugfix for size requests
+	* VariantsCombinaison.cs: Bugfix for size requests, and hierachy
+	* Ribbon.cs: Revert to previous version of Ribbon (I have opted for another
+	  solution for variants combinaisons)
+	* DropdownRibbonGroup.cs: Introduction of Drop down ribbon group
+
 2008-07-10  Laurent Debacker <debackerl@gmail.com> 
 
 	* GroupVariant.cs: Implementation of the concept of "variant" for Group.
