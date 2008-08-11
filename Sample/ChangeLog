@@ -1,3 +1,8 @@
+2008-08-11  Laurent Debacker <debackerl@gmail.com> 
+
+	* DropdownGroupTest.cs: New test for drop down ribbon groups
+	* VariantsCombinaisonTest.cs: New test for variants combinaisons
+
 2008-06-28  Laurent Debacker <debackerl@gmail.com> 
 
 	* MainWindow.cs: Updated sample to show menu opening in app menu
