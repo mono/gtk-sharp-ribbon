@@ -10,36 +10,36 @@
 	  solution for variants combinaisons)
 	* DropdownRibbonGroup.cs: Introduction of Drop down ribbon group
 
-2008-07-10  Laurent Debacker <debackerl@gmail.com> 
+2008-08-05  Laurent Debacker <debackerl@gmail.com> 
 
 	* GroupVariant.cs: Implementation of the concept of "variant" for Group.
 	* VariantsCombinaison.cs: Implementation for the concept of variant
 	  combinaisons.
 	* Ribbon.cs: Migrating Ribbon to variants combinaisons.
 
-2008-07-03  Laurent Debacker <debackerl@gmail.com> 
+2008-07-24  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Enhanced key tip theme
 	* SyntheticWindow.cs: Debug code
 	* RibbonGroup.cs: Avoid memory leak
 
-2008-07-01  Laurent Debacker <debackerl@gmail.com> 
+2008-07-18  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenuItem.cs: Open/close menu on mouse hover, with timer
 	* ApplicationMenu.cs: Reset default menu on button click
 
-2008-06-30  Laurent Debacker <debackerl@gmail.com> 
+2008-07-17  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenu.cs: hide container when windows is hidden
 	* ApplicationButton.cs: keep the app menu pressed while the app menu is
 	  opened
 
-2008-06-29  Laurent Debacker <debackerl@gmail.com> 
+2008-07-14  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenuItem.cs: Text align fix, and delayed menu opening.
 	* ApplicationMenu.cs: One hard-coded value removed
 
-2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+2008-07-11  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: More compliant app menu background, and new feature for buttons:
 	  opaque background.
@@ -47,129 +47,129 @@
 	* ApplicationButton.cs: API update
 	* BaseButton.cs: New feature: opaque background
 
-2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+2008-07-11  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Nicer menu items background
 	* ApplicationMenuItem.cs: Attempt to fix justification of menu item labels,
 	  not ok yet
 	* ApplicationMenu.cs: Fixed menu size
 
-2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+2008-07-11  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenu.cs: Working menu opening
 
-2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+2008-07-11  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: First steps for the app menu theme
 	* ApplicationMenuItem.cs: Better handling of fast moving pointers
 	* ApplicationMenu.cs: Bugfixes
 
-2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+2008-07-11  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Better behavior of hilighs for app menu item
 	* ApplicationMenuItem.cs: More work on proper app menu item behavior
 	  (hilights)
 
-2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+2008-07-10  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Fix them code for app menu item
 	* ApplicationMenuItem.cs: Bug fixes
 	* ApplicationMenu.cs: Remove debug code
 
-2008-06-27  Laurent Debacker <debackerl@gmail.com> 
+2008-07-09  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenu.cs: Bugfix, can now open app menu multiple times
 
-2008-06-27  Laurent Debacker <debackerl@gmail.com> 
+2008-07-08  Laurent Debacker <debackerl@gmail.com> 
 
 	* QuickAccessToolbar.cs, FlowLayoutContainer.cs: Bugfix in remove
 	* Theme.cs, ApplicationMenuItem.cs: API update
 	* ApplicationMenu.cs: Lot of work to solve the rendering bug. It is now
 	  gone, but I cannot open the menu more than once...
 
-2008-06-27  Laurent Debacker <debackerl@gmail.com> 
+2008-07-07  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Initial theme code for app menu item borowed from button
 	* ApplicationMenuItem.cs: Size alloc, size request, drawing
 	* ApplicationMenu.cs: Bug fix in size alloc
 
-2008-06-26  Laurent Debacker <debackerl@gmail.com> 
+2008-07-07  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenu.cs: Autohide the app menu when required
 
-2008-06-26  Laurent Debacker <debackerl@gmail.com> 
+2008-07-07  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Updated for new app menu API
 	* ApplicationMenuItem.cs, ApplicationMenu.cs: Major refactoring
 	* ApplicationButton.cs: Update for new App menu API
 
-2008-06-26  Laurent Debacker <debackerl@gmail.com> 
+2008-07-06  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenu.cs: Compilation bug fixes, sorry
 
-2008-06-26  Laurent Debacker <debackerl@gmail.com> 
+2008-07-06  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Dummy renderer for App menu and app menu item
 	* ApplicationMenu.cs: More work on app menu item
 
-2008-06-25  Laurent Debacker <debackerl@gmail.com> 
+2008-07-04  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationButton.cs: Bugfixes for popup position, and misc other bug
 	  fixes
 
-2008-06-24  Laurent Debacker <debackerl@gmail.com> 
+2008-07-04  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenu.cs: Implementation of SizeAllocated for app menu, and more
 	  work on SizeRequest
 
-2008-06-24  Laurent Debacker <debackerl@gmail.com> 
+2008-07-04  Laurent Debacker <debackerl@gmail.com> 
 
 	* ApplicationMenu.cs: Size requisition for app menu
 
-2008-06-24  Laurent Debacker <debackerl@gmail.com> 
+2008-07-03  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Fix background theme for Quick Access Toolbar when there is no
 	  app button
 
-2008-06-23  Laurent Debacker <debackerl@gmail.com> 
+2008-06-30  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Quick Access Toolbar background
 	* ApplicationMenu.cs: Initial stub API for application menu.
 	* QuickAccessToolbar.cs: Take care of height requests from children widgets
 
-2008-06-22  Laurent Debacker <debackerl@gmail.com> 
+2008-06-28  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Title bar's background is not compliant
 	* Ribbon.cs: Fix title bar layout code
 
-2008-06-22  Laurent Debacker <debackerl@gmail.com> 
+2008-06-28  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Implementation of the required drop shadow for the app button
 
-2008-06-22  Laurent Debacker <debackerl@gmail.com> 
+2008-06-27  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Change background color depending on current state
 	* Ribbon.cs: Bugfix for layout code
 	* ApplicationButton.cs: Bugfix for widget initialization
 
-2008-06-22  Laurent Debacker <debackerl@gmail.com> 
+2008-06-27  Laurent Debacker <debackerl@gmail.com> 
 
 	* QuickAccessToolbar.cs: Bugfix, add NO_WINDOW flag
 	* Theme.cs: Implement final app button theme
 	* Ribbon.cs: Bugfix, call app button and quick access toolbar when calling
 	  children
 
-2008-06-19  Laurent Debacker <debackerl@gmail.com> 
+2008-06-23  Laurent Debacker <debackerl@gmail.com> 
 
 	* QuickAccessToolbar.cs: Implement size request and size allocation.
 
-2008-06-06  Laurent Debacker <debackerl@gmail.com> 
+2008-06-16  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs: Stub for the application button.
 	* Ribbon.cs: Support for the application button.
 	* ApplicationButton.cs: Initial commit.
 
-2008-06-05  Laurent Debacker <debackerl@gmail.com> 
+2008-06-09  Laurent Debacker <debackerl@gmail.com> 
 
 	* Ribbon.cs: 
 	
@@ -183,7 +183,7 @@
 	
 	  * Drawing of the QuickAccessToolbar's background.
 
-2008-06-01  Laurent Debacker <debackerl@gmail.com> 
+2008-06-02  Laurent Debacker <debackerl@gmail.com> 
 
 	* Ribbon.cs: 
 	
@@ -205,7 +205,7 @@
 	
 	  * Fixed a typo in a comment.
 
-2008-06-01  Laurent Debacker <debackerl@gmail.com> 
+2008-06-02  Laurent Debacker <debackerl@gmail.com> 
 
 	* Ribbon.cs: 
 	
@@ -227,23 +227,23 @@
 	
 	  * Fixed a typo in a comment.
 
-2008-01-29  Laurent Debacker <debackerl@gmail.com> 
+2008-02-07  Laurent Debacker <debackerl@gmail.com> 
 
 	* Gallery.cs, GalleryPopupWindow.cs: * You can now click anywhere to close
 	  the popup. (Paweł 'X4lldux' Drygas).
 	
 	  * Proper tile selection. (Paweł 'X4lldux' Drygas).
 
-2008-01-24  Laurent Debacker <debackerl@gmail.com> 
+2008-01-25  Laurent Debacker <debackerl@gmail.com> 
 
 	* RibbonGroup.cs, Button.cs: Added signal names to enable accelerators.
 
-2007-12-30  Laurent Debacker <debackerl@gmail.com> 
+2008-01-19  Laurent Debacker <debackerl@gmail.com> 
 
 	* Theme.cs, Position.cs, RibbonGroup.cs, Ribbons.mdp: Left, Right, and Top
 	  position for the label of RibbonGroup implemented.
 
-2007-12-28  Laurent Debacker <debackerl@gmail.com> 
+2007-12-27  Laurent Debacker <debackerl@gmail.com> 
 
 	* Ribbon.cs, ToggleButton.cs, RibbonGroup.cs, Tile.cs, Gallery.cs, Theme.cs,
 	  gtk-gui/generated.cs, gtk-gui/objects.xml, gtk-gui/gui.stetic,
