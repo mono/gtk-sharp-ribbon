@@ -3,22 +3,26 @@
 	* DropdownGroupTest.cs: New test for drop down ribbon groups
 	* VariantsCombinaisonTest.cs: New test for variants combinaisons
 
-2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+2008-07-11  Laurent Debacker <debackerl@gmail.com> 
 
 	* MainWindow.cs: Updated sample to show menu opening in app menu
 
-2008-06-28  Laurent Debacker <debackerl@gmail.com> 
+2008-07-11  Laurent Debacker <debackerl@gmail.com> 
 
 	* MainWindow.cs: Update sample to showcase advance in app menu
 	  implementation
 
-2008-06-27  Laurent Debacker <debackerl@gmail.com> 
+2008-07-07  Laurent Debacker <debackerl@gmail.com> 
 
 	* MainWindow.cs: Update sample
 
-2008-06-23  Laurent Debacker <debackerl@gmail.com> 
+2008-06-30  Laurent Debacker <debackerl@gmail.com> 
 
-	* MainWindow.cs: Updated sample
+	* Sample/MainWindow.cs: Updated sample
+	* Ribbons/Theme.cs: Quick Access Toolbar background
+	* Ribbons/ApplicationMenu.cs: Initial stub API for application menu.
+	* Ribbons/QuickAccessToolbar.cs: Take care of height requests from
+	  children widgets
 
 2007-12-29  Laurent Debacker <debackerl@gmail.com> 
 
