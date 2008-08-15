@@ -9,8 +9,8 @@ namespace Sample
 		{
 			Console.WriteLine ("Starting ...");
 			Application.Init ();
-			//MainWindow win = new MainWindow ();
-			VariantsCombinaisonTest win = new VariantsCombinaisonTest ();
+			MainWindow win = new MainWindow ();
+			//VariantsCombinaisonTest win = new VariantsCombinaisonTest ();
 			win.Show ();
 			Application.Run ();
 		}

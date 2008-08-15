@@ -1,3 +1,8 @@
+2008-08-15  Laurent Debacker <debackerl@gmail.com> 
+
+	* MainWindow.cs: Updated the main sample to integrate the sample developed
+	  in VariantsCombinaisonTest
+
 2008-08-11  Laurent Debacker <debackerl@gmail.com> 
 
 	* DropdownGroupTest.cs: New test for drop down ribbon groups

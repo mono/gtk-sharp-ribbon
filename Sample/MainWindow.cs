@@ -24,82 +24,35 @@ namespace Sample
 			Title = "Ribbons Sample";
 			AppPaintable = true;
 			
-			Ribbons.Button button0 = new Ribbons.Button ("Hello World");
+			VariantsCombinaisonSwitcher page0 = new VariantsCombinaisonSwitcher ();
 			
-			group0 = new RibbonGroup ();
-			group0.Label = "Summer of Code";
-			group0.Child = button0;
-			group0.Expand += onClick;
+			RibbonGroup group0 = CreateGroup0 ();
+			RibbonGroup group1 = CreateGroup1 ();
+			RibbonGroup group2 = CreateGroup2 ();
+			DropdownRibbonGroup dgroup0 = CreateDropdownGroup0 ();
+			dgroup0.Group = group0;
+			DropdownRibbonGroup dgroup1 = CreateDropdownGroup1 ();
+			dgroup1.Group = group1;
+			DropdownRibbonGroup dgroup2 = CreateDropdownGroup2 ();
+			dgroup2.Group = group2;
 			
-			Menu openMenu = new Menu ();
-			MenuItem abc_txt = new MenuItem ("abc.txt");
-			openMenu.Append (abc_txt);
-			MenuItem foo_txt = new MenuItem ("foo.txt");
-			openMenu.Append (foo_txt);
+			VariantsCombinaison combi0 = new VariantsCombinaison ();
+			combi0.Append (group0);
+			combi0.Append (group1);
+			combi0.Append (group2);
+			page0.AddCombinaison (combi0);
 			
-			Ribbons.Button open = Ribbons.Button.FromStockIcon (Gtk.Stock.Open, "Open", false);
-			open.DropDownMenu = openMenu;
-			open.Clicked += onClick;
+			VariantsCombinaison combi1 = new VariantsCombinaison ();
+			combi1.Append (group0);
+			combi1.Append (group1);
+			combi1.Append (dgroup2);
+			page0.AddCombinaison (combi1);
 			
-			Ribbons.Button button1 = new Ribbons.Button ("Menu Test");
-			button1.Clicked += onClick;
-			Menu button1_menu = new Menu ();
-			MenuItem option1 = new MenuItem ("Option 1");
-			button1_menu.Append (option1);
-			button1.DropDownMenu = button1_menu;
-			
-			Ribbons.ToolPack fileToolPack = new Ribbons.ToolPack ();
-			fileToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.New, "New", false));
-			fileToolPack.AppendButton (open);
-			fileToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Save, "Save", false));
-			
-			Ribbons.ToolPack printerToolPack = new Ribbons.ToolPack ();
-			printerToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Print, "Print", false));
-			
-			Ribbons.ToolPack fontToolPack = new Ribbons.ToolPack ();
-			fontToolPack.AppendButton (Ribbons.ToggleButton.FromStockIcon (Gtk.Stock.Bold, false));
-			fontToolPack.AppendButton (Ribbons.ToggleButton.FromStockIcon (Gtk.Stock.Italic, false));
-			fontToolPack.AppendButton (Ribbons.ToggleButton.FromStockIcon (Gtk.Stock.Underline, false));
-			
-			ComboBox font = new ComboBox (new string[] { "Arial", "Verdana" });
-			font.Active = 0;
-			
-			//Ribbons.FlowLayoutContainer flow0 = new FlowLayoutContainer ();
-			Ribbons.ToolBox flow0 = new ToolBox ();
-			flow0.Append (fileToolPack);
-			flow0.Append (printerToolPack);
-			flow0.Append (fontToolPack);
-			flow0.Append (font);
-			
-			HBox btnFlowBox = new HBox (false, 2);
-			btnFlowBox.Add (button1);
-			btnFlowBox.Add (flow0);
-			
-			// Little hack because Gtk+ is not designed to support size negociations
-			btnFlowBox.SizeAllocated += delegate(object Sender, SizeAllocatedArgs e)
-			{
-				flow0.HeightRequest = e.Allocation.Height;
-			};
-			
-			group1 = new RibbonGroup ();
-			group1.Label = "I will be back";
-			group1.Child = btnFlowBox;
-			
-			Gallery gallery = new Gallery ();
-			gallery.AppendTile (new SampleTile ("1"));
-			gallery.AppendTile (new SampleTile ("2"));
-			gallery.AppendTile (new SampleTile ("3"));
-			gallery.AppendTile (new SampleTile ("4"));
-			gallery.AppendTile (new SampleTile ("5"));
-			
-			group2 = new RibbonGroup ();
-			group2.Label = "Gallery";
-			group2.Child = gallery;
-			
-			HBox page0 = new HBox (false, 2);
-			page0.PackStart (group0, false, false, 0);
-			page0.PackStart (group1, false, false, 0);
-			page0.PackStart (group2, false, false, 0);
+			VariantsCombinaison combi2 = new VariantsCombinaison ();
+			combi2.Append (dgroup0);
+			combi2.Append (dgroup1);
+			combi2.Append (dgroup2);
+			page0.AddCombinaison (combi2);
 			
 			HBox page1 = new HBox (false, 2);
 			RibbonGroup group10 = new RibbonGroup ();
@@ -185,6 +138,113 @@ namespace Sample
 			
 			this.Resize (200, 200);
 			this.ShowAll ();
+		}
+
+		private RibbonGroup CreateGroup0 ()
+		{
+			Ribbons.Button button0 = new Ribbons.Button ("Hello World");
+			
+			RibbonGroup group0 = new RibbonGroup ();
+			group0.Label = "Summer of Code";
+			group0.Child = button0;
+			group0.Expand += onClick;
+			
+			return group0;
+		}
+		
+		private DropdownRibbonGroup CreateDropdownGroup0 ()
+		{
+			DropdownRibbonGroup ret = new DropdownRibbonGroup ();
+			ret.Label = "Summer of Code";
+			return ret;
+		}
+		
+		private RibbonGroup CreateGroup1 ()
+		{
+			Ribbons.Button button1 = new Ribbons.Button ("Menu Test");
+			button1.Clicked += onClick;
+			Menu button1_menu = new Menu ();
+			MenuItem option1 = new MenuItem ("Option 1");
+			button1_menu.Append (option1);
+			button1.DropDownMenu = button1_menu;
+			
+			Menu openMenu = new Menu ();
+			MenuItem abc_txt = new MenuItem ("abc.txt");
+			openMenu.Append (abc_txt);
+			MenuItem foo_txt = new MenuItem ("foo.txt");
+			openMenu.Append (foo_txt);
+			
+			Ribbons.Button open = Ribbons.Button.FromStockIcon (Gtk.Stock.Open, "Open", false);
+			open.DropDownMenu = openMenu;
+			open.Clicked += onClick;
+			
+			Ribbons.ToolPack fileToolPack = new Ribbons.ToolPack ();
+			fileToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.New, "New", false));
+			fileToolPack.AppendButton (open);
+			fileToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Save, "Save", false));
+			
+			Ribbons.ToolPack printerToolPack = new Ribbons.ToolPack ();
+			printerToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Print, "Print", false));
+			
+			Ribbons.ToolPack fontToolPack = new Ribbons.ToolPack ();
+			fontToolPack.AppendButton (Ribbons.ToggleButton.FromStockIcon (Gtk.Stock.Bold, false));
+			fontToolPack.AppendButton (Ribbons.ToggleButton.FromStockIcon (Gtk.Stock.Italic, false));
+			fontToolPack.AppendButton (Ribbons.ToggleButton.FromStockIcon (Gtk.Stock.Underline, false));
+			
+			ComboBox font = new ComboBox (new string[] { "Arial", "Verdana" });
+			font.Active = 0;
+			
+			Ribbons.ToolBox flow0 = new ToolBox ();
+			flow0.Append (fileToolPack);
+			flow0.Append (printerToolPack);
+			flow0.Append (fontToolPack);
+			flow0.Append (font);
+			
+			HBox btnFlowBox = new HBox (false, 2);
+			btnFlowBox.Add (button1);
+			btnFlowBox.Add (flow0);
+			
+			// Little hack because Gtk+ is not designed to support size negociations
+			btnFlowBox.SizeAllocated += delegate(object Sender, SizeAllocatedArgs e)
+			{
+				flow0.HeightRequest = e.Allocation.Height;
+			};
+			
+			RibbonGroup group1 = new RibbonGroup ();
+			group1.Label = "I will be back";
+			group1.Child = btnFlowBox;
+			
+			return group1;
+		}
+		
+		private DropdownRibbonGroup CreateDropdownGroup1 ()
+		{
+			DropdownRibbonGroup ret = new DropdownRibbonGroup ();
+			ret.Label = "I will be back";
+			return ret;
+		}
+		
+		private RibbonGroup CreateGroup2 ()
+		{
+			Gallery gallery = new Gallery ();
+			gallery.AppendTile (new SampleTile ("1"));
+			gallery.AppendTile (new SampleTile ("2"));
+			gallery.AppendTile (new SampleTile ("3"));
+			gallery.AppendTile (new SampleTile ("4"));
+			gallery.AppendTile (new SampleTile ("5"));
+			
+			RibbonGroup group2 = new RibbonGroup ();
+			group2.Label = "Gallery";
+			group2.Child = gallery;
+			
+			return group2;
+		}
+		
+		private DropdownRibbonGroup CreateDropdownGroup2 ()
+		{
+			DropdownRibbonGroup ret = new DropdownRibbonGroup ();
+			ret.Label = "Gallery";
+			return ret;
 		}
 
 		private void onClick (object Sender, EventArgs e)
