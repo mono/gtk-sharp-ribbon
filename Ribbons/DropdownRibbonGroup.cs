@@ -53,8 +53,8 @@ namespace Ribbons
 			win.ShowAll ();
 			win.GdkWindow.Move (x, y);
 			
-			win.ButtonPressEvent += delegate { KillMenu (true); };
-			win.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			win.ButtonReleaseEvent += delegate { KillMenu (true); };
+			win.AddEvents ((int)(Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
 			Grab.Add (win);
 			Gdk.GrabStatus grabbed = Gdk.Pointer.Grab (win.GdkWindow, true, Gdk.EventMask.ButtonPressMask, null, null, 0);
