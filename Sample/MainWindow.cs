@@ -83,8 +83,9 @@ namespace Sample
 			};
 			
 			QuickAccessToolbar qat = new QuickAccessToolbar ();
-			qat.Append (Ribbons.Button.FromStockIcon (Gtk.Stock.New, false));
-			qat.Append (Ribbons.Button.FromStockIcon (Gtk.Stock.Save, false));
+			Ribbons.Button qatNew, qatSave;
+			qat.Append (qatNew = Ribbons.Button.FromStockIcon (Gtk.Stock.New, false));
+			qat.Append (qatSave = Ribbons.Button.FromStockIcon (Gtk.Stock.Save, false));
 			
 			ribbon = new Ribbon ();
 			ribbon.ApplicationButton = new ApplicationButton ();
@@ -131,6 +132,13 @@ namespace Sample
 			
 			Add (master);
 
+			ribbon.ApplicationButton.KeyTip = new KeyTip (appMenu, "A");
+			qat.AddKeyTip (new KeyTip (qatNew, "B"));
+			qat.AddKeyTip (new KeyTip (qatSave, "C"));
+			ribbon.AddTabKeyTip (new KeyTip (pageLabel0, "D"));
+			ribbon.AddTabKeyTip (new KeyTip (pageLabel1, "E"));
+			ribbon.AddTabKeyTip (new KeyTip (pageLabel2, "F"));
+			
 			ScreenChanged += Window_OnScreenChanged;
 			Window_OnScreenChanged (this, null);
 			ExposeEvent += Window_OnExpose;
@@ -254,6 +262,26 @@ namespace Sample
 			d.AddButton ("Close", ResponseType.Close);
 			d.Run ();
 			d.Destroy ();
+		}
+		
+		protected override bool OnKeyPressEvent (Gdk.EventKey evnt)
+		{
+			if(evnt.Key.ToString() == "Alt_L" || evnt.Key.ToString() == "ISO_Level3_Shift")
+			{
+				ribbon.ShowTopLevelKeyTips ();
+			}
+			
+			return base.OnKeyPressEvent (evnt);
+		}
+
+		protected override bool OnKeyReleaseEvent (Gdk.EventKey evnt)
+		{
+			if(evnt.Key.ToString() == "Alt_L" || evnt.Key.ToString() == "ISO_Level3_Shift")
+			{
+				ribbon.HideKeyTips ();
+			}
+			
+			return base.OnKeyReleaseEvent (evnt);
 		}
 		
 		[GLib.ConnectBefore]
