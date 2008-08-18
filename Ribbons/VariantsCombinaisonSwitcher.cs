@@ -4,6 +4,9 @@ using Gtk;
 
 namespace Ribbons
 {
+	/// <summary>
+	/// Selects a certain VariantsCombinaison based on space constraints.
+	/// </summary>
 	public class VariantsCombinaisonSwitcher : Container
 	{
 		private List<VariantsCombinaison> combinaisons;

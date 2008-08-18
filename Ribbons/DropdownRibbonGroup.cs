@@ -3,6 +3,9 @@ using Gtk;
 
 namespace Ribbons
 {
+	/// <summary>
+	/// A toggle button replacing a ribbon group when space is too constrained.
+	/// </summary>
 	public class DropdownRibbonGroup : ToggleButton
 	{
 		private RibbonGroup group;

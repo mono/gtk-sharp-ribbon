@@ -7,6 +7,13 @@ namespace Ribbons
 	// Note: this widget shall display a button at the left and the right
 	// to scroll groups when the allocated with is not enough.
 	
+	/// <summary>
+	/// A set of widgets displayed horizontaly.
+	/// </summary>
+	/// <remarks>
+	/// On the contrary of a classical container, the VariantsCombinaison is only
+	/// the parent of its children if it has a parent itself.
+	/// </remarks>
 	public class VariantsCombinaison : Container
 	{
 		private List<Widget> widgets;

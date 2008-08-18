@@ -6,6 +6,9 @@ using Cairo;
 
 namespace Ribbons
 {
+	/// <summary>
+	/// The main menu of an application, displaying application-level commands, and documents list. 
+	/// </summary>
 	public class ApplicationMenu : Container
 	{
 		private static readonly TimeSpan openTimeoutSec = new TimeSpan (0, 0, 0, 0, 300);

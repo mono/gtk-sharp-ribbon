@@ -15,18 +15,6 @@ namespace Ribbons
 			lastHoveredWidgets = new List<Gtk.Widget> ();
 		}
 		
-		protected override bool OnKeyPressEvent (EventKey evnt)
-		{
-			Console.WriteLine ("A");
-			return base.OnKeyPressEvent (evnt);
-		}
-
-		protected override bool OnKeyReleaseEvent (EventKey evnt)
-		{
-			Console.WriteLine ("B");
-			return base.OnKeyReleaseEvent (evnt);
-		}
-		
 		protected override bool OnWidgetEvent (Gdk.Event evnt)
 		{
 			// This method is hooked to block the event as soon as possible if required

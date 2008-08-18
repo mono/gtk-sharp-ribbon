@@ -1,13 +1,19 @@
 using System;
 using System.Collections.Generic;
 using Gtk;
+using Cairo;
 
 namespace Ribbons
 {
+	/// <summary>
+	/// Displays several widgets (typical shortcuts to common functionalities) next to the application button.
+	/// </summary>
 	public class QuickAccessToolbar : Container
 	{
 		private List<Widget> widgets;
+		private List<KeyTip> keyTips;
 		private int[] widths;
+		private Theme theme = new Theme ();
 		
 		public QuickAccessToolbar()
 		{
@@ -17,6 +23,7 @@ namespace Ribbons
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
 			this.widgets = new List<Widget> ();
+			this.keyTips = new List<KeyTip> ();
 		}
 		
 		/// <summary>Adds a widget before all existing widgets.</summary>
@@ -59,6 +66,21 @@ namespace Ribbons
 			widgets.RemoveAt (WidgetIndex);
 			
 			ShowAll ();
+		}
+		
+		public void AddKeyTip (KeyTip kt)
+		{
+			keyTips.Add (kt);
+		}
+		
+		public void RemoveKeyTip (KeyTip kt)
+		{
+			keyTips.Remove (kt);
+		}
+		
+		public void ClearKeyTips ()
+		{
+			keyTips.Clear ();
 		}
 		
 		protected override void ForAll (bool include_internals, Callback callback)
@@ -109,6 +131,27 @@ namespace Ribbons
 				b.SizeAllocate (r);
 				x += r.Width;
 				++i;
+			}
+		}
+		
+		public void ShowKeyTips ()
+		{
+			int x, y;
+			GdkWindow.GetOrigin (out x, out y);
+			int lineY = y + Allocation.Y + (int)(0.66666 * Allocation.Height);
+			
+			foreach(KeyTip kt in keyTips)
+			{
+				Gdk.Rectangle alloc = kt.Target.Allocation;
+				kt.ShowAt (x + alloc.X + (alloc.Width >> 1), lineY, 0.5, 0.0);
+			}
+		}
+		
+		public void HideKeyTips ()
+		{
+			foreach(KeyTip kt in keyTips)
+			{
+				kt.Hide ();
 			}
 		}
 	}

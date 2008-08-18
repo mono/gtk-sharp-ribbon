@@ -5,6 +5,9 @@ using Cairo;
 
 namespace Ribbons
 {
+	/// <summary>
+	/// Single item to be displayed in the application menu.
+	/// </summary>
 	public class ApplicationMenuItem : Bin
 	{
 		private static readonly TimeSpan openTimeoutSec = new TimeSpan (0, 0, 0, 0, 300);

@@ -8,6 +8,8 @@ namespace Ribbons
 	/// <summary>Ribbon widget.</summary>
 	public class Ribbon : Container
 	{
+		private enum KeyTipLevel { None, TopLevel, Tab };
+		
 		private static double borderWidth = 2.0;
 		private static double space = 2.0;
 		private static double pagePadding = 3.0;
@@ -31,6 +33,9 @@ namespace Ribbons
 		private Gtk.Requisition shortcutsRequisition;
 		private Gtk.Requisition pageRequisition;
 		private double headerHeight;
+		
+		private KeyTipLevel queuedKeyTipLevel = KeyTipLevel.None;
+		private List<KeyTip> tabKeyTips;
 		
 		public event PageSelectedHandler PageSelected;
 		public event PageAddedHandler PageAdded;
@@ -155,6 +160,7 @@ namespace Ribbons
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
 			this.pages = new List<RibbonPage> ();
+			this.tabKeyTips = new List<KeyTip> ();
 			this.curPageIndex = -1;
 		}
 		
@@ -331,6 +337,21 @@ namespace Ribbons
 		{
 			int i = CurrentPageIndex;
 			if(i < NPages - 1) CurrentPageIndex = i + 1;
+		}
+		
+		public void AddTabKeyTip (KeyTip kt)
+		{
+			tabKeyTips.Add (kt);
+		}
+		
+		public void RemoveTabKeyTip (KeyTip kt)
+		{
+			tabKeyTips.Remove (kt);
+		}
+		
+		public void ClearTabKeyTips ()
+		{
+			tabKeyTips.Clear ();
 		}
 		
 		protected override void ForAll (bool include_internals, Callback callback)
@@ -510,6 +531,42 @@ namespace Ribbons
 			}
 		}
 		
+		public void ShowTopLevelKeyTips ()
+		{
+			queuedKeyTipLevel = KeyTipLevel.TopLevel;
+			
+			if(appButton != null) appButton.ShowKeyTips ();
+			if(toolbar != null) toolbar.ShowKeyTips ();
+			
+			int x, y;
+			GdkWindow.GetOrigin(out x, out y);
+			
+			int tabLineY = (int)(y + Allocation.Y + headerHeight);
+			foreach(KeyTip kt in tabKeyTips)
+			{
+				kt.ShowAt (x + kt.Target.Allocation.X + (kt.Target.Allocation.Width >> 1), tabLineY, 0.5, 0.0);
+			}
+		}
+		
+		public void ShowTabLevelKeyTips ()
+		{
+			queuedKeyTipLevel = KeyTipLevel.Tab;
+			
+		}
+		
+		public void HideKeyTips ()
+		{
+			queuedKeyTipLevel = KeyTipLevel.None;
+			
+			if(appButton != null) appButton.HideKeyTips ();
+			if(toolbar != null) toolbar.HideKeyTips ();
+			
+			foreach(KeyTip kt in tabKeyTips)
+			{
+				kt.Hide ();
+			}
+		}
+		
 		protected override bool OnExposeEvent (Gdk.EventExpose evnt)
 		{
 			Context cr = Gdk.CairoHelper.Create (this.GdkWindow);
@@ -568,6 +625,7 @@ namespace Ribbons
 			private Widget label, page;
 			private Requisition labelReq;
 			private Gdk.Rectangle labelAlloc;
+			private List<KeyTip> tabKeyTips;
 			
 			/// <summary>Label widget of the page.</summary>
 			public Widget Label
@@ -601,9 +659,10 @@ namespace Ribbons
 			
 			public RibbonPage (Ribbon Parent, Widget Page, Widget Label)
 			{
-				parent = Parent;
+				this.parent = Parent;
 				this.Label = Label;
 				this.Page = Page;
+				this.tabKeyTips = new List<KeyTip> ();
 			}
 			
 			public void SetLabelAllocation (Gdk.Rectangle r)

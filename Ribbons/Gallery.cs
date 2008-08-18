@@ -17,7 +17,8 @@ namespace Ribbons
 		private int tileSpacing;
 		private GalleryPopupWindow popup;
 		
-		private Tile selectedTile;
+		private bool multiSelect;
+		private List<Tile> selectedTiles;
 		private int firstDisplayedTileIndex, lastDisplayedTileIndex;
 		private int btnWidth;
 		private Requisition upReq, downReq, expandReq;
@@ -89,13 +90,17 @@ namespace Ribbons
 					popup = null;
 				}
 				
-				if(selectedTile != null) selectedTile.Selected = false;
-				selectedTile = value;
-				if(selectedTile != null)
+				if(selectedTiles.Count > 0)
 				{
-					selectedTile.Selected = true;
+					foreach(Tile t in selectedTiles) t.Selected = false;
+				}
+				selectedTiles.Clear ();
+				selectedTiles.Add (value);
+				if(value != null)
+				{
+					value.Selected = true;
 					
-					int idx = tiles.FindIndex (delegate (Tile t) { return t == selectedTile; });
+					int idx = tiles.FindIndex (delegate (Tile t) { return t == value; });
 					if(idx != -1)
 					{
 						firstDisplayedTileIndex = idx/defaultTilesPerRow*defaultTilesPerRow;
@@ -105,7 +110,13 @@ namespace Ribbons
 					}
 				}
 			}
-			get { return selectedTile; }
+			get { return selectedTiles.Count == 0 ? null : selectedTiles[selectedTiles.Count-1]; }
+		}
+		
+		/// <summary>Gets the list of selected Tiles.</summary>
+		public IList<Tile> SelectedTiles
+		{
+			get { return selectedTiles.AsReadOnly (); }
 		}
 		
 		/// <summary>Returns all Tiles.</summary>
@@ -136,10 +147,12 @@ namespace Ribbons
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
 			this.tiles = new List<Tile> ();
+			this.selectedTiles = new List<Tile> ();
 			
 			this.defaultTilesPerRow = 3;
 			this.firstDisplayedTileIndex = 0;
 			this.lastDisplayedTileIndex = -1;
+			this.multiSelect = false;
 			
 			this.tileHeight = 56;
 			this.tileWidth = 72;
@@ -205,7 +218,7 @@ namespace Ribbons
 			Tile t = tiles[TileIndex];
 			t.Clicked -= Tile_Clicked;
 			t.Unparent ();
-			if(selectedTile == t) selectedTile = null;
+			if(selectedTiles.Contains (t)) selectedTiles.Remove (t);
 			
 			tiles.RemoveAt (TileIndex);
 		}
@@ -279,9 +292,21 @@ namespace Ribbons
 		
 		private void Tile_Clicked(object Sender, EventArgs e)
 		{
-			if(selectedTile != null) selectedTile.Selected = false;
-			selectedTile = (Tile)Sender;
-			selectedTile.Selected = true;
+			Tile selectedTile = (Tile)Sender;
+			
+			if(multiSelect)
+			{
+				selectedTile.Selected = !selectedTile.Selected;
+				if(selectedTile.Selected)
+					selectedTiles.Add (selectedTile);
+				else
+					selectedTiles.Remove (selectedTile);
+			}
+			else if(Sender != SelectedTile)
+			{
+				SelectedTile = selectedTile;
+			}
+			
 			OnTileSelected (selectedTile);
 		}
 		

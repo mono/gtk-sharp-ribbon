@@ -4,12 +4,16 @@ using Gtk;
 
 namespace Ribbons
 {
+	/// <summary>
+	/// A button used to display the application menu. This button has a theme different than all other buttons. 
+	/// </summary>
 	public class ApplicationButton : BaseButton
 	{
 		protected const double lineWidth = 1.0;
 		
 		private ApplicationMenu appMenu;
 		private bool menuOpened;
+		private KeyTip keyTip;
 		
 		/// <summary>Fired when the button is clicked.</summary>
 		[GLib.Signal("clicked")]
@@ -18,6 +22,12 @@ namespace Ribbons
 		public ApplicationMenu Menu
 		{
 			get { return appMenu; }
+		}
+		
+		public KeyTip KeyTip
+		{
+			get { return keyTip; }
+			set { keyTip = value; }
 		}
 		
 		public ApplicationButton()
@@ -88,6 +98,25 @@ namespace Ribbons
 			Theme.ButtonState state = this.state;
 			if(menuOpened) state = Theme.ButtonState.Pressed;
 			theme.DrawApplicationButton (cr, Allocation, state, lineWidth, this);
+		}
+		
+		public void ShowKeyTips ()
+		{
+			if(keyTip != null)
+			{
+				Gdk.Rectangle alloc = Allocation;
+				int x, y;
+				GdkWindow.GetOrigin (out x, out y);
+				keyTip.ShowAt (x + alloc.X + (alloc.Width >> 1), y + alloc.Y + (alloc.Height >> 1), 0.5, 0.5);
+			}
+		}
+		
+		public void HideKeyTips ()
+		{
+			if(keyTip != null)
+			{
+				keyTip.Hide ();
+			}
 		}
 		
 		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
