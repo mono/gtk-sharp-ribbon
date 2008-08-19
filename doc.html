@@ -1,0 +1,42 @@
+<html>
+<body> 
+<h1 id="q305">Ribbon Lib</h1>
+<h2 id="q3050">Widgets</h2>
+<h3 id="il.y">Ribbon</h3>
+<ul id="jxcv">
+<li id="jxcv0">Ribbon: this is the main widget ribbon.</li>
+<li id="jxcv1">RibbonGroup: groups several widgets with common functionalities.</li>
+<li id="hgsd">DropDownRibbonGroup <span id="il.y0" style="color: rgb(255, 0, 0);">(new 2008!)</span>: a toggle button replacing a ribbon group when space is too constrained.<br id="hgsd0">
+</li>
+<li id="lsku">QuickAccessToolbar <span id="hgsd1" style="color: rgb(255, 0, 0);">(new 2008!)</span>: displays several widgets (typical shortcuts to common functionalities) next to the application button.</li>
+<li id="dd8e">VariantsCombinaisonSwitcher <span id="dd8e0" style="color: rgb(255, 0, 0);">(new 2008!)</span>: selects a certain VariantsCombinaison based on space constraints.<br id="rj5z">
+</li>
+</ul>
+<h3 id="il.y1">Application Menu</h3>
+<ul id="il.y2">
+<li id="eb.4">ApplicationButton <span id="il.y3" style="color: rgb(255, 0, 0);">(new 2008!)</span>: a button used to display the application menu. This button has a theme different than all other buttons.&nbsp;</li>
+<li id="gv9z">ApplicationMenu <span id="il.y4" style="color: rgb(255, 0, 0);">(new 2008!)</span>: the main menu of an application, displaying application-level commands, and documents list.</li>
+<li id="j6c0">ApplicationMenuItem <span id="il.y5" style="color: rgb(255, 0, 0);">(new 2008!)</span>: single item to be displayed in the application menu.</li>
+</ul>
+<h3 id="il.y6">Common widgets</h3>
+<ul id="il.y7">
+<li id="fblt0">Button: a simple button with optional drop down menu.</li>
+<li id="w985">ToggleButton: a button that remain pressed when activated by the user.</li>
+<li id="gkdb">ToolPack: packs several buttons together.</li>
+<li id="zihz">ToolBox: displays several widgets in one or several rows depending on allocated space.<br id="zihz0">
+</li>
+<li id="qtt3">Gallery: displays several options to the user as thumbnails.</li>
+<li id="v5bg">Tile: a single option made available by a gallery</li>
+</ul>
+<h2 id="jgir">Issues</h2>
+<h3 id="srhl">Size negotiations</h3>
+The Gtk+ layout system processes in two passes: 1) size request 2) size allocation. However, in most widgets, it would be great to negotiate the size request based on size constraints (i.e. given a specific height constraint, return a width request). Currently, HeightRequest and WidthRequest properties are often used to bypass this.<br id="hu:g">
+<h3 id="hu:g0">Transparency</h3>
+The Ribbon specification requires many widgets to be transparent. However, the Gtk+ officialy requires a 'composited' desktop to support this. Nevertheless, composited desktop is still rare. In addition, the implementation of key tips requires to be able to display tiny labels on top of all widgets, and regardless of widgets' boundaries (most key tip must be displayed between two adjacent widgets). This would require many small windows to be created, or a single transparent one to be created. Currently, all widgets are used in window-less mode. Consequently, they all share the same window. However, it also disrupts the dispatchs of Gtk+ events. That's why the Ribbon library contains the SyntheticWindow class, which takes care of dispatching events to window-less widgets.<br id="qhys">
+<h3 id="vkzc">Key bindings</h3>
+The Ribbon library must be able to retrieve the keyboard shortcut of accelerators in order to display the key associated to each widget. The solution to this problem is still obscure.<br id="m:yx">
+<h2 id="tidz">Windows' drop shadow</h2>
+We should have the ability to disable drop shadow on certain window because it breaks the visual style of the Ribbon.<br id="wn_q">
+<br id="tidz0">
+</body>
+</html>
