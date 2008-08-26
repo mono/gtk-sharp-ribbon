@@ -28,7 +28,7 @@ namespace Ribbons
 		private Label lbl;
 		private Widget menu;
 		
-		protected Theme theme = new Theme ();
+		protected Theme theme = Theme.DefaultTheme;
 		
 		[GLib.Signal("action")]
 		public event EventHandler Action;

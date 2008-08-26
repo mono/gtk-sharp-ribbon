@@ -13,7 +13,7 @@ namespace Ribbons
 		private List<Widget> widgets;
 		private List<KeyTip> keyTips;
 		private int[] widths;
-		private Theme theme = new Theme ();
+		private Theme theme = Theme.DefaultTheme;
 		
 		public QuickAccessToolbar()
 		{

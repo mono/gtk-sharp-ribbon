@@ -8,7 +8,7 @@ namespace Ribbons
 	/// <summary>Gallery of Tiles.</summary>
 	public class Gallery : Container
 	{
-		protected Theme theme = new Theme ();
+		protected Theme theme = Theme.DefaultTheme;
 		private int tileWidth, tileHeight;
 		private List<Tile> tiles;
 		private Button up, down;

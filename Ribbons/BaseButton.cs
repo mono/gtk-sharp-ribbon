@@ -7,7 +7,7 @@ namespace Ribbons
 	/// <summary>Foundation of all buttons.</summary>
 	public abstract class BaseButton : Bin
 	{
-		protected Theme theme = new Theme ();
+		protected Theme theme = Theme.DefaultTheme;
 		protected GroupStyle groupStyle;
 		protected Theme.ButtonState state = Theme.ButtonState.Default;
 		protected PositionType imgPos;

@@ -19,7 +19,7 @@ namespace Ribbons
 		private static double roundSize = 4.0;
 		
 		protected ColorScheme colorScheme = new ColorScheme ();
-		protected Theme theme = new Theme ();
+		protected Theme theme = Theme.DefaultTheme;
 		
 		protected List<RibbonPage> pages;
 		protected int curPageIndex;

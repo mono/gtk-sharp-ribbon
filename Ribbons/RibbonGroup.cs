@@ -7,7 +7,7 @@ namespace Ribbons
 	/// <summary>Ribbon group.</summary>
 	public class RibbonGroup : Bin
 	{
-		protected Theme theme = new Theme ();
+		protected Theme theme = Theme.DefaultTheme;
 		protected string lbl;
 		protected Pango.Layout lbl_layout;
 		protected Button expandButton;

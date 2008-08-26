@@ -19,7 +19,7 @@ namespace Ribbons
 		private const int borderWidth = 6;
 		private const int space = 2;
 		
-		protected Theme theme = new Theme ();
+		protected Theme theme = Theme.DefaultTheme;
 		
 		private ApplicationButton appBtn;
 		private List<ApplicationMenuItem> items;

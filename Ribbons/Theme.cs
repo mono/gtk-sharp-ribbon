@@ -7,6 +7,14 @@ namespace Ribbons
 	/// <remarks>Used to draw ribbon widgets.</remarks>
 	public class Theme
 	{
+		private static Theme defaultTheme = new Theme ();
+		
+		public static Theme DefaultTheme
+		{
+			get { return defaultTheme; }
+			set { defaultTheme = value; }
+		}
+		
 		public enum ButtonState
 		{
 			Default, Hover, Pressed

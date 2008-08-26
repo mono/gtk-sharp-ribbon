@@ -1,3 +1,9 @@
+2008-08-26  Laurent Debacker <debackerl@gmail.com> 
+
+	* QuickAccessToolbar.cs, Gallery.cs, Theme.cs, ApplicationMenuItem.cs,
+	  Ribbon.cs, RibbonGroup.cs, ApplicationMenu.cs, BaseButton.cs: Use the
+	  Default Theme instead of creating a new instance for each widget.
+
 2008-08-18  Laurent Debacker <debackerl@gmail.com> 
 
 	* QuickAccessToolbar.cs, Ribbon.cs: Add support for key tips.
